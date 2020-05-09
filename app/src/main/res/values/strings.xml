@@ -11,4 +11,7 @@
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="role">Role</string>
+
+    <!-- Welcome Activity -->
+    <string name="welcomeMessage">Welcome to Tessuro! A quiz system for both instructors and students</string>
 </resources>
