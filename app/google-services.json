@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "761238189950",
+    "firebase_url": "https://bpom-b11ce.firebaseio.com",
+    "project_id": "bpom-b11ce",
+    "storage_bucket": "bpom-b11ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761238189950:android:64f3fda29f22f3b854a52f",
+        "android_client_info": {
+          "package_name": "com.csulb.tessuro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761238189950-7r8mrugt84gg5b58aufth9j9dipa3bbl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbOV63IIPLAwRJZEemOzpHJPJvzlRQpdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761238189950-7r8mrugt84gg5b58aufth9j9dipa3bbl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
