@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/change_user_button"-->
+<!--        android:layout_width="311dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="64dp"-->
+<!--        android:minHeight="60dp"-->
+<!--        android:text="Update Username"-->
+<!--        android:textSize="16sp"-->
+<!--        app:backgroundTint="@color/cardview_light_background" />-->
+    <Button
+        android:id="@+id/username_button"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="311dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="311dp"
+        android:backgroundTint="@color/darkTessuro"
+        android:text="Update Username"
+        android:textSize="16sp"
+        android:textColor="@color/mediumTessuro"
+        />
+
+    <Button
+        android:id="@+id/password_button"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="311dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="371dp"
+        android:backgroundTint="@color/darkTessuro"
+        android:text="Update Password"
+        android:textSize="16sp"
+        android:textColor="@color/mediumTessuro"/>
+
+
+
+</RelativeLayout>
