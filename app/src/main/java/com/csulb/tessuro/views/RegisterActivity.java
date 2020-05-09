@@ -4,11 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +18,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,9 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout email_editText;
     private TextInputLayout pass_editText;
     private TextInputLayout retypePass_editText;
-    private RadioGroup radioGroup;
     private RadioButton admin_radioButton;
-    private RadioButton standard_radioButton;
     private MaterialButton register_button;
     private AuthUtils authUtils = new AuthUtils();
     private String TAG = RegisterActivity.class.getSimpleName();
@@ -59,9 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         pass_editText = findViewById(R.id.pass_textField);
         retypePass_editText = findViewById(R.id.retypePass_textField);
         register_button = findViewById(R.id.register_button);
-        radioGroup = findViewById(R.id.user_radioGroup);
         admin_radioButton = findViewById(R.id.admin_radioButton);
-        standard_radioButton = findViewById(R.id.standard_radioButton);
 
         auth = FirebaseAuth.getInstance();
         handleRegisterButton();
@@ -151,7 +142,6 @@ public class RegisterActivity extends AppCompatActivity {
                     registerUser(username, email, pass, role);
 
                 } catch (Exception e) {
-                    System.out.println("error");
                     Log.e(TAG, "Register form: " + e.getMessage());
                 }
             }
@@ -202,9 +192,9 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 });
                     } else {
-                        Log.e(TAG, "Create user with email and password error" + task.getException());
+                        Log.e(TAG, "Create user with email and password error" + Objects.requireNonNull(task.getException()).getMessage());
                         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(RegisterActivity.this);
-                        dialogBuilder.setTitle("Authentication Error");
+                        dialogBuilder.setTitle("Registration Error");
                         dialogBuilder.setIcon(R.drawable.ic_error);
                         dialogBuilder.setMessage(Objects.requireNonNull(task.getException()).getMessage());
                         dialogBuilder.show();
