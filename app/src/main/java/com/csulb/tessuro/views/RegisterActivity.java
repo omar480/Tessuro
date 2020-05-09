@@ -4,8 +4,12 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.csulb.tessuro.R;
@@ -18,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,8 +40,9 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout email_editText;
     private TextInputLayout pass_editText;
     private TextInputLayout retypePass_editText;
-    private TextInputLayout role_editText;
-    private AutoCompleteTextView role_dropdown;
+    private RadioGroup radioGroup;
+    private RadioButton admin_radioButton;
+    private RadioButton standard_radioButton;
     private MaterialButton register_button;
     private AuthUtils authUtils = new AuthUtils();
     private String TAG = RegisterActivity.class.getSimpleName();
@@ -53,16 +59,11 @@ public class RegisterActivity extends AppCompatActivity {
         pass_editText = findViewById(R.id.pass_textField);
         retypePass_editText = findViewById(R.id.retypePass_textField);
         register_button = findViewById(R.id.register_button);
-        role_editText = findViewById(R.id.role_textField);
-        role_dropdown = findViewById(R.id.role_autoCompleteTextView);
+        radioGroup = findViewById(R.id.user_radioGroup);
+        admin_radioButton = findViewById(R.id.admin_radioButton);
+        standard_radioButton = findViewById(R.id.standard_radioButton);
 
-        String[] role_items = { "Admin", "Standard" };
-        ArrayAdapter<String> role_adapter = new ArrayAdapter<>(RegisterActivity.this, R.layout.role_dropdown_item, role_items);
-        role_dropdown.setAdapter(role_adapter);
         auth = FirebaseAuth.getInstance();
-
-
-
         handleRegisterButton();
     }
 
@@ -75,7 +76,18 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void handleRegisterButton() {
+    private String determineSelectedRole() {
+        String role;
+
+        if (admin_radioButton.isChecked()) {
+            role = "Admin";
+        } else {
+            role = "Standard";
+        }
+        return role;
+    }
+
+    private void handleRegisterButton() {
 
         this.register_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                     SystemUtils systemUtils = new SystemUtils();
                     systemUtils.hideSoftKeyboard(RegisterActivity.this);
                 } catch (NullPointerException e) {
-                    Log.e(TAG, "Keyboard drop isnt open");
+                    Log.e(TAG, "Keyboard drop isn't open");
                 }
 
                 boolean username_valid = false;
@@ -99,7 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
                     String email = email_editText.getEditText().getText().toString();
                     String pass = pass_editText.getEditText().getText().toString();
                     String retypePass = retypePass_editText.getEditText().getText().toString();
-                    String role = role_editText.getEditText().getText().toString();
+                    String role = determineSelectedRole();
 
                     System.out.println("username " + username);
                     System.out.println("email" + email);
