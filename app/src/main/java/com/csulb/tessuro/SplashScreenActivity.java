@@ -6,6 +6,8 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.csulb.tessuro.views.WelcomeActivity;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     private ProgressBar mProgressbar;
@@ -44,7 +46,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         private void startApp()
         {
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
         }
 
