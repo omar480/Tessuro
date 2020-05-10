@@ -24,12 +24,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username_textField"
+            android:id="@+id/fullname_textField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="311dp"
             android:layout_height="68dp"
             android:layout_marginTop="16dp"
-            android:hint="@string/username"
+            android:hint="@string/fullname"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/colorTessuro"
             app:endIconMode="clear_text"
@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tessuro_logo"
-            app:startIconDrawable="@drawable/ic_username">
+            app:startIconDrawable="@drawable/ic_fullname">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -58,7 +58,7 @@
             app:hintTextColor="@color/colorTessuro"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username_textField"
+            app:layout_constraintTop_toBottomOf="@+id/fullname_textField"
             app:startIconDrawable="@drawable/ic_email">
 
             <com.google.android.material.textfield.TextInputEditText

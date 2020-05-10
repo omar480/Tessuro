@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 
 public class AuthUtils {
 
-    private final int USERNAME_MIN_BOUND = 5;
-    private final int USERNAME_MAX_BOUND = 16;
+    private final int FULLNAME_MIN_BOUND = 5;
+    private final int FULLNAME_MAX_BOUND = 16;
     private final int PW_MIN_BOUND = 6;
     private final int PW_MAX_BOUND = 20;
     private final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]+");
@@ -30,8 +30,8 @@ public class AuthUtils {
      * @param username is the input for the username field.
      * @return true if the username is valid between the bounds.
      */
-    public boolean isUsernameLengthValid(String username) {
-        return (username.length() >= USERNAME_MIN_BOUND && username.length() <= USERNAME_MAX_BOUND);
+    public boolean isFullnameLengthValid(String username) {
+        return (username.length() >= FULLNAME_MIN_BOUND && username.length() <= FULLNAME_MAX_BOUND);
     }
 
     /**
@@ -69,15 +69,4 @@ public class AuthUtils {
     public boolean isRoleValid(String role) {
         return (role.equals("Admin") || role.equals("Standard"));
     }
-
-    //    /**
-//     * Verifies that the username is available from the dictionary.
-//     *
-//     * @param username   is the input for the username field.
-//     * @param dictionary is the dictionary that holds credentials.
-//     * @return true if the username is available.
-//     */
-//    public boolean isUsernameAvailable(String username, final HashMap<String, String> dictionary) {
-//        return !dictionary.containsKey(username);
-//    }
 }

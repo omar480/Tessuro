@@ -31,7 +31,7 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputLayout username_editText;
+    private TextInputLayout fullname_editText;
     private TextInputLayout email_editText;
     private TextInputLayout pass_editText;
     private TextInputLayout retypePass_editText;
@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        username_editText = findViewById(R.id.username_textField);
+        fullname_editText = findViewById(R.id.fullname_textField);
         email_editText = findViewById(R.id.email_textField);
         pass_editText = findViewById(R.id.pass_textField);
         retypePass_editText = findViewById(R.id.retypePass_textField);
@@ -91,27 +91,27 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.e(TAG, "Keyboard drop isn't open");
                 }
 
-                boolean username_valid = false;
+                boolean fullname_valid = false;
                 boolean email_valid = false;
                 boolean pass_valid = false;
                 boolean retypePass_valid = false;
                 boolean role_valid = false;
 
                 try {
-                    String username = username_editText.getEditText().getText().toString();
+                    String fullname = fullname_editText.getEditText().getText().toString();
                     String email = email_editText.getEditText().getText().toString();
                     String pass = pass_editText.getEditText().getText().toString();
                     String retypePass = retypePass_editText.getEditText().getText().toString();
                     String role = determineSelectedRole();
 
-                    System.out.println("username " + username);
+                    System.out.println("fullname " + fullname);
                     System.out.println("email" + email);
                     System.out.println("pass" + pass);
                     System.out.println("rety" + retypePass);
                     System.out.println("role" + role);
 
-                    if (authUtils.isUsernameLengthValid(username)) {
-                        username_valid = true;
+                    if (authUtils.isFullnameLengthValid(fullname)) {
+                        fullname_valid = true;
                     }
                     if (authUtils.isEmailValid(email)) {
                         email_valid = true;
@@ -126,20 +126,20 @@ public class RegisterActivity extends AppCompatActivity {
                         role_valid = true;
                     }
 
-                    boolean[] form_fields = { username_valid, email_valid, pass_valid, retypePass_valid, role_valid };
+                    boolean[] form_fields = { fullname_valid, email_valid, pass_valid, retypePass_valid, role_valid };
 
                     for (boolean form_valid : form_fields) {
                         if (!form_valid) {  // not valid
                             MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(RegisterActivity.this);
                             dialogBuilder.setTitle("Invalid Inputs");
                             dialogBuilder.setIcon(R.drawable.ic_error);
-                            dialogBuilder.setMessage("Username must be have 5 to 16 characters and passwords must have 6 to 20 characters");
+                            dialogBuilder.setMessage("Full name must have 5 to 16 characters and passwords must have 6 to 20 characters");
                             dialogBuilder.show();
                             return;
                         }
                     }
 
-                    registerUser(username, email, pass, role);
+                    registerUser(fullname, email, pass, role);
 
                 } catch (Exception e) {
                     Log.e(TAG, "Register form: " + e.getMessage());
@@ -152,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void registerUser(final String username, final String email, final String pass, final String role) {
+    private void registerUser(final String fullname, final String email, final String pass, final String role) {
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -160,10 +160,10 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.e(TAG, "Create user with email and password success");
 
-                        UserModel userModel = new UserModel(username, email, role);
+                        UserModel userModel = new UserModel(fullname, email, role);
                         Map<String, Object> user = new HashMap<>();
 
-                        user.put("username", username);
+                        user.put("fullname", fullname);
                         user.put("email", email);
                         user.put("role", role);
                         user.put("createdAt", new Date());

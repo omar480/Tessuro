@@ -1,18 +1,18 @@
 package com.csulb.tessuro.models;
 
 public class UserModel {
-    private String username;
+    private String fullname;
     private String email;
     private String role;
 
-    public UserModel(String username, String email, String role) {
-        this.username = username;
-        this.email = username;
+    public UserModel(String fullname, String email, String role) {
+        this.fullname = fullname;
+        this.email = fullname;
         this.role = role;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public void setEmail(String email) {
@@ -23,8 +23,8 @@ public class UserModel {
         this.role = role;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFullname() {
+        return fullname;
     }
 
     public String getEmail() {
