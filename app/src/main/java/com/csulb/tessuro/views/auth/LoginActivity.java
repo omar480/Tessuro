@@ -3,12 +3,10 @@ package com.csulb.tessuro.views.auth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.csulb.tessuro.DashboardActivity;
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.utils.SystemUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,7 +16,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 

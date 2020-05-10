@@ -1,4 +1,4 @@
-package com.csulb.tessuro;
+package com.csulb.tessuro.views.dashboard;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 
+import com.csulb.tessuro.HelpFragment;
+import com.csulb.tessuro.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

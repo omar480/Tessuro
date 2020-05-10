@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".DashboardActivity"/>
+        <activity android:name=".views.dashboard.DashboardActivity"/>
         <activity android:name=".views.auth.LoginActivity" />
 <!--        <activity-->
 <!--            android:name=".MainActivity"-->
