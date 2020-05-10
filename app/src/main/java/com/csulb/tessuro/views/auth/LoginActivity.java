@@ -3,12 +3,15 @@ package com.csulb.tessuro.views.auth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 
 import com.csulb.tessuro.R;
+import com.csulb.tessuro.models.UserModel;
 import com.csulb.tessuro.utils.SystemUtils;
 import com.csulb.tessuro.views.dashboard.DashboardActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +24,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.Objects;
 
@@ -109,7 +113,16 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     Log.i(TAG, "Firestore get user info success");
+
+                    // get the data from firebase
+                    String fullname = Objects.requireNonNull(documentSnapshot.get("fullname")).toString();
+                    String role = Objects.requireNonNull(documentSnapshot.get("role")).toString();
+
+                    String[] user = { fullname, email, role };  // user information
+
+                    // start the dashboard and pass the user info
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    intent.putExtra("USER_MODEL_KEY", user);
                     startActivity(intent);
                 }
             });

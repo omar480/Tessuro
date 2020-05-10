@@ -1,6 +1,7 @@
 package com.csulb.tessuro.views.auth;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.UserModel;
 import com.csulb.tessuro.utils.AuthUtils;
 import com.csulb.tessuro.utils.SystemUtils;
+import com.csulb.tessuro.views.dashboard.DashboardActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -178,6 +180,13 @@ public class RegisterActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "Firestore add user success");
+
+                                        String[] user = { fullname, email, role };  // user information
+
+                                        // start the dashboard and pass the user info
+                                        Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);
+                                        intent.putExtra("USER_MODEL_KEY", user);
+                                        startActivity(intent);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
