@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class AuthUtils {
 
     private final int FULLNAME_MIN_BOUND = 5;
-    private final int FULLNAME_MAX_BOUND = 16;
+    private final int FULLNAME_MAX_BOUND = 35;
     private final int PW_MIN_BOUND = 6;
     private final int PW_MAX_BOUND = 20;
     private final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]+");

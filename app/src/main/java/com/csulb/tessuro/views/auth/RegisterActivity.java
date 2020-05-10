@@ -133,7 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                             MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(RegisterActivity.this);
                             dialogBuilder.setTitle("Invalid Inputs");
                             dialogBuilder.setIcon(R.drawable.ic_error);
-                            dialogBuilder.setMessage("Full name must have 5 to 16 characters and passwords must have 6 to 20 characters");
+                            dialogBuilder.setMessage("Full name must have 5 to 35 characters and passwords must have 6 to 20 characters");
                             dialogBuilder.show();
                             return;
                         }
