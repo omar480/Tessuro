@@ -1,12 +1,14 @@
-package com.csulb.tessuro.views;
+package com.csulb.tessuro.views.auth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.csulb.tessuro.DashboardActivity;
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.utils.SystemUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,9 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-        // TODO IF USER IS SIGNED IN PUSH THEM TO OTHER PAGE
-        FirebaseUser currentUser = auth.getCurrentUser();
     }
 
     private void handleLoginButton() {
@@ -84,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.e(TAG, "Logging in user success");
 
-                        // TODO PUSH USER TO NEW ACTIVITY
+//                        Intent intent = new Intent(LoginActivity.this)
 
                     } else {
                         Log.e(TAG, "Logging in user error" + Objects.requireNonNull(task.getException()).getMessage());

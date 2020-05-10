@@ -7,9 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     style="@style/Theme.AppCompat.NoActionBar"
-    tools:context=".SplashScreenActivity">
-
-
+    tools:context=".views.intro.SplashScreenActivity">
 
     <ImageView
         android:layout_width="wrap_content"

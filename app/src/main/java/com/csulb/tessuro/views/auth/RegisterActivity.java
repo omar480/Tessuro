@@ -1,4 +1,4 @@
-package com.csulb.tessuro.views;
+package com.csulb.tessuro.views.auth;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

@@ -10,6 +10,12 @@
     <color name="progressbar">#f7dda4</color>
 
 
+<!--  ivory  #F9F9ED-->
+<!--  silverish #ECECEC -->
+<!--  darker silver #CDCDCD -->
+
+    <color name="tester">#ECECEC</color>
     <color name="colorTessuro">#464d5c</color>
+
 
 </resources>

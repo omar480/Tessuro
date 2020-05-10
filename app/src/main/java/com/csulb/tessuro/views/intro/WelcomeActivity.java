@@ -1,4 +1,4 @@
-package com.csulb.tessuro.views;
+package com.csulb.tessuro.views.intro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 import com.csulb.tessuro.R;
 
+import com.csulb.tessuro.views.auth.LoginActivity;
+import com.csulb.tessuro.views.auth.RegisterActivity;
 import com.google.android.material.button.MaterialButton;
 
 public class WelcomeActivity extends AppCompatActivity {

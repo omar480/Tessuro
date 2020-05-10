@@ -10,14 +10,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".views.WelcomeActivity"/>
-        <activity android:name=".views.LoginActivity" />
+        <activity android:name=".DashboardActivity"/>
+        <activity android:name=".views.auth.LoginActivity" />
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:theme="@style/AppTheme.noActionBar" />-->
+
+        <activity android:name=".views.auth.RegisterActivity" />
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme.noActionBar" />
-        <activity android:name=".views.RegisterActivity" />
+            android:name=".views.intro.WelcomeActivity"
+            android:theme="@style/AppTheme.noActionBar">
+        </activity>
+
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".views.intro.SplashScreenActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
