@@ -3,19 +3,24 @@ package com.csulb.tessuro.views.auth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.utils.SystemUtils;
+import com.csulb.tessuro.views.dashboard.DashboardActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
@@ -72,15 +77,15 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void loginUser(String email, String pass) {
+    private void loginUser(final String email, final String pass) {
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        Log.e(TAG, "Logging in user success");
+                        Log.i(TAG, "Logging in user success");
 
-//                        Intent intent = new Intent(LoginActivity.this)
+                        fetchUserData(email);// get the user data
 
                     } else {
                         Log.e(TAG, "Logging in user error" + Objects.requireNonNull(task.getException()).getMessage());
@@ -90,6 +95,22 @@ public class LoginActivity extends AppCompatActivity {
                         dialogBuilder.setMessage(Objects.requireNonNull(task.getException()).getMessage());
                         dialogBuilder.show();
                     }
+                }
+            });
+    }
+
+    private void fetchUserData(final String email) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore
+            .collection("users")
+            .document(email)
+            .get()
+            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    Log.i(TAG, "Firestore get user info success");
+                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    startActivity(intent);
                 }
             });
     }
