@@ -67,15 +67,15 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void startApp() {
-//        if (userLoggedIn) {
-//            Log.e(TAG, "Logged in: " + Objects.requireNonNull(auth.getCurrentUser()).getEmail());
-//            Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
-//            startActivity(intent);
-//        } else {
+        if (userLoggedIn) {
+            Log.e(TAG, "Logged in: " + Objects.requireNonNull(auth.getCurrentUser()).getEmail());
+            Intent intent = new Intent(SplashScreenActivity.this, DashboardActivity.class);
+            startActivity(intent);
+        } else {
             Log.e(TAG, "Not logged in");
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
-//        }
+        }
     }
 }
 
