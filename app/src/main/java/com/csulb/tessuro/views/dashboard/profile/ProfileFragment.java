@@ -1,0 +1,95 @@
+package com.csulb.tessuro.views.dashboard.profile;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.csulb.tessuro.ProfileInfoFragment;
+import com.csulb.tessuro.ProfileUpdateFragment;
+import com.csulb.tessuro.R;
+import com.csulb.tessuro.views.dashboard.DashboardActivity;
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class ProfileFragment extends Fragment {
+
+    private ViewPager profile_viewPager;
+    private TabLayout profile_tabLayout;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        profile_viewPager = view.findViewById(R.id.profile_viewPager);
+        profile_tabLayout = view.findViewById(R.id.profile_tabLayout);
+
+        // fragments for each tab
+        ProfileInfoFragment profileInfoFragment = new ProfileInfoFragment();
+        ProfileUpdateFragment profileUpdateFragment = new ProfileUpdateFragment();
+
+
+        Objects.requireNonNull(profile_tabLayout.getTabAt(0)).setIcon(R.drawable.ic_info);
+        Objects.requireNonNull(profile_tabLayout.getTabAt(1)).setIcon(R.drawable.ic_update);
+
+        // combine tab layout and view pager together
+        profile_tabLayout.setupWithViewPager(profile_viewPager);
+
+        // create the view page adapter and attach the child frag manager
+        assert getFragmentManager() != null;
+        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getChildFragmentManager(), 0);
+        viewPageAdapter.addFragment(profileInfoFragment, "Info");
+        viewPageAdapter.addFragment(profileUpdateFragment, "Update");
+        profile_viewPager.setAdapter(viewPageAdapter);
+
+        return view;
+    }
+
+
+    private static class ViewPageAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> fragmentList = new ArrayList<>();
+        private List<String> fragmentTitles = new ArrayList<>();
+
+        ViewPageAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
+        }
+
+        void addFragment(Fragment fragment, String title) {
+            fragmentList.add(fragment);
+            fragmentTitles.add(title);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitles.get(position);
+        }
+    }
+}

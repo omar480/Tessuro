@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileInfoFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorTessuro"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/tessuro_logo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/tessuro"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/profileEmail_textField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="311dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/update_fullname"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/colorTessuro"
+                app:endIconMode="clear_text"
+                app:hintTextColor="@color/colorTessuro"
+                app:startIconDrawable="@drawable/ic_fullname">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusedByDefault="true"
+                    android:inputType="text"
+                    android:maxLength="35" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/updateName_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="311dp"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:text="@string/update_fullname"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorTessuro"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="197dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:background="@android:color/darker_gray" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/profileCurrPass_textField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="311dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/current_pass"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/colorTessuro"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="@color/colorTessuro"
+                app:startIconDrawable="@drawable/ic_current_password"
+                tools:layout_editor_absoluteX="17dp"
+                tools:layout_editor_absoluteY="69dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/profileNewPass_textField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="311dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="@string/new_pass"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/colorTessuro"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="@color/colorTessuro"
+                app:startIconDrawable="@drawable/ic_password"
+                tools:layout_editor_absoluteX="17dp"
+                tools:layout_editor_absoluteY="69dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/profilePass_textField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="311dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="@string/retype_password"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/colorTessuro"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="@color/colorTessuro"
+                app:startIconDrawable="@drawable/ic_password"
+                tools:layout_editor_absoluteX="17dp"
+                tools:layout_editor_absoluteY="69dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxLength="20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/login_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="311dp"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:text="@string/update_pass"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorTessuro"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="197dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:background="@android:color/darker_gray" />
+
+            <ImageView
+                android:layout_width="311dp"
+                android:layout_height="311dp"
+                android:src="@drawable/image_placeholder"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/selectImage_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="311dp"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:text="@string/select_image"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorTessuro"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="197dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/updateImage_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="311dp"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:text="@string/update_image"
+                android:textSize="16sp"
+                app:backgroundTint="@color/colorTessuro"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="197dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
