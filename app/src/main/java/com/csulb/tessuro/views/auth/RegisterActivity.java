@@ -1,7 +1,9 @@
 package com.csulb.tessuro.views.auth;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
     private AuthUtils authUtils = new AuthUtils();
     private String TAG = RegisterActivity.class.getSimpleName();
     private FirebaseAuth auth;
+    private static final String USER_SHARED_PREF = "user";
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -150,10 +153,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void generateDialog() {
-
-    }
-
     private void registerUser(final String fullname, final String email, final String pass, final String role) {
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
@@ -162,8 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.e(TAG, "Create user with email and password success");
 
-                        UserModel userModel = new UserModel(fullname, email, role);
-                        Map<String, Object> user = new HashMap<>();
+                        Map<String, Object> user = new HashMap<>(); // hashmap used to store the data in firestore
 
                         user.put("fullname", fullname);
                         user.put("email", email);
@@ -181,11 +179,12 @@ public class RegisterActivity extends AppCompatActivity {
                                     public void onSuccess(Void aVoid) {
                                         Log.d(TAG, "Firestore add user success");
 
-                                        String[] user = { fullname, email, role };  // user information
+                                        // maintain the user
+                                        UserModel userModel = new UserModel(getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
+                                        userModel.setUser(fullname, email, role);
 
                                         // start the dashboard and pass the user info
                                         Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);
-                                        intent.putExtra("USER_MODEL_KEY", user);
                                         startActivity(intent);
                                     }
                                 })

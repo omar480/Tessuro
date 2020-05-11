@@ -3,10 +3,9 @@ package com.csulb.tessuro.views.auth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 
@@ -24,7 +23,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.Objects;
 
@@ -35,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialButton login_button;
     private FirebaseAuth auth;
     private String TAG = LoginActivity.class.getSimpleName();
+    private static final String USER_SHARED_PREF = "user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,11 +117,11 @@ public class LoginActivity extends AppCompatActivity {
                     String fullname = Objects.requireNonNull(documentSnapshot.get("fullname")).toString();
                     String role = Objects.requireNonNull(documentSnapshot.get("role")).toString();
 
-                    String[] user = { fullname, email, role };  // user information
+                    UserModel userModel = new UserModel(getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
+                    userModel.setUser(fullname, email, role);
 
-                    // start the dashboard and pass the user info
+                    // start the dashboard
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                    intent.putExtra("USER_MODEL_KEY", user);
                     startActivity(intent);
                 }
             });
