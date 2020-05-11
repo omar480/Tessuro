@@ -15,7 +15,8 @@
 <!--  darker silver #CDCDCD -->
 
     <color name="tester">#ECECEC</color>
-    <color name="colorTessuro">#464d5c</color>
-
+    <color name="colorTessuroPrimary">#464d5c</color>
+    <color name="colorTessuroBackground">#ECECEC</color>
+<!--    <color name="colorTessuroBackgroundDark"></color>-->
 
 </resources>

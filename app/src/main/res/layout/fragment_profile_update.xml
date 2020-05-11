@@ -15,7 +15,7 @@
             android:id="@+id/linearLayoutProfileInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorTessuro"
+            android:background="@color/colorTessuroPrimary"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="30dp"
@@ -51,9 +51,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/update_fullname"
                 app:boxBackgroundMode="outline"
-                app:boxStrokeColor="@color/colorTessuro"
+                app:boxStrokeColor="@color/colorTessuroPrimary"
                 app:endIconMode="clear_text"
-                app:hintTextColor="@color/colorTessuro"
+                app:hintTextColor="@color/colorTessuroPrimary"
                 app:startIconDrawable="@drawable/ic_fullname">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -72,7 +72,7 @@
                 android:minHeight="60dp"
                 android:text="@string/update_fullname"
                 android:textSize="16sp"
-                app:backgroundTint="@color/colorTessuro"
+                app:backgroundTint="@color/colorTessuroPrimary"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="197dp" />
 
@@ -90,9 +90,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/current_pass"
                 app:boxBackgroundMode="outline"
-                app:boxStrokeColor="@color/colorTessuro"
+                app:boxStrokeColor="@color/colorTessuroPrimary"
                 app:endIconMode="password_toggle"
-                app:hintTextColor="@color/colorTessuro"
+                app:hintTextColor="@color/colorTessuroPrimary"
                 app:startIconDrawable="@drawable/ic_current_password"
                 tools:layout_editor_absoluteX="17dp"
                 tools:layout_editor_absoluteY="69dp">
@@ -112,9 +112,9 @@
                 android:layout_marginTop="10dp"
                 android:hint="@string/new_pass"
                 app:boxBackgroundMode="outline"
-                app:boxStrokeColor="@color/colorTessuro"
+                app:boxStrokeColor="@color/colorTessuroPrimary"
                 app:endIconMode="password_toggle"
-                app:hintTextColor="@color/colorTessuro"
+                app:hintTextColor="@color/colorTessuroPrimary"
                 app:startIconDrawable="@drawable/ic_password"
                 tools:layout_editor_absoluteX="17dp"
                 tools:layout_editor_absoluteY="69dp">
@@ -134,9 +134,9 @@
                 android:layout_marginTop="10dp"
                 android:hint="@string/retype_password"
                 app:boxBackgroundMode="outline"
-                app:boxStrokeColor="@color/colorTessuro"
+                app:boxStrokeColor="@color/colorTessuroPrimary"
                 app:endIconMode="password_toggle"
-                app:hintTextColor="@color/colorTessuro"
+                app:hintTextColor="@color/colorTessuroPrimary"
                 app:startIconDrawable="@drawable/ic_password"
                 tools:layout_editor_absoluteX="17dp"
                 tools:layout_editor_absoluteY="69dp">
@@ -156,7 +156,7 @@
                 android:minHeight="60dp"
                 android:text="@string/update_pass"
                 android:textSize="16sp"
-                app:backgroundTint="@color/colorTessuro"
+                app:backgroundTint="@color/colorTessuroPrimary"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="197dp" />
 
@@ -180,7 +180,7 @@
                 android:minHeight="60dp"
                 android:text="@string/select_image"
                 android:textSize="16sp"
-                app:backgroundTint="@color/colorTessuro"
+                app:backgroundTint="@color/colorTessuroPrimary"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="197dp" />
 
@@ -192,7 +192,7 @@
                 android:minHeight="60dp"
                 android:text="@string/update_image"
                 android:textSize="16sp"
-                app:backgroundTint="@color/colorTessuro"
+                app:backgroundTint="@color/colorTessuroPrimary"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="197dp" />
         </LinearLayout>

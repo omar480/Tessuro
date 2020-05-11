@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.UserModel;
+import com.csulb.tessuro.views.dashboard.help.HelpFragment;
 import com.csulb.tessuro.views.dashboard.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -33,7 +34,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         String email = userModel.getEmail();
         String role = userModel.getRole();
         String created = userModel.getCreated();
-        Log.e(TAG, "onCreate: " + fullname + email + role + "  " + created);
+        Log.i(TAG, "onCreate: " + fullname + " "  + email + " " + role + " " + created);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

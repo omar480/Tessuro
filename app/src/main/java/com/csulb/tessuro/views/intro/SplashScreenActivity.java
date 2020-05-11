@@ -11,12 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.csulb.tessuro.views.dashboard.DashboardActivity;
 import com.csulb.tessuro.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.Objects;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private ProgressBar mProgressbar;
+    private AVLoadingIndicatorView mProgressbar;
     private boolean userLoggedIn;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -27,7 +28,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen_activity);
 
-        mProgressbar = findViewById(R.id.progbar_splash);
+        mProgressbar = findViewById(R.id.splashProgress);
         userLoggedIn = false;
         auth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -55,10 +56,10 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void doWork() {
-        for (int progress = 0; progress < 101; progress += 20) {
+        for (int progress = 0; progress < 101; progress += 15) {
             try{
                 Thread.sleep(500);
-                mProgressbar.setProgress(progress);
+                mProgressbar.show();
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -75,6 +76,10 @@ public class SplashScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
 //        }
+    }
+
+    private void fetchUserData() {
+
     }
 }
 

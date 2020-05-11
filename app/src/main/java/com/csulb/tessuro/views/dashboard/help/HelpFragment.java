@@ -1,4 +1,4 @@
-package com.csulb.tessuro.views.dashboard;
+package com.csulb.tessuro.views.dashboard.help;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

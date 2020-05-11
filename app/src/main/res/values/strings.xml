@@ -48,4 +48,7 @@
     <string name="update_pass">Update Password</string>
     <string name="select_image">Select Image</string>
     <string name="update_image">Update Image</string>
+
+    <!-- Help fragment -->
+    <string name="help_message">Error 404\nHelp information not found</string>
 </resources>

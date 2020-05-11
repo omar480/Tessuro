@@ -15,7 +15,7 @@
             android:id="@+id/linearLayoutProfileInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorTessuro"
+            android:background="@color/colorTessuroPrimary"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="30dp"
@@ -65,7 +65,7 @@
                     android:textSize="16sp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:drawableTint="@color/colorTessuro"
+                    android:drawableTint="@color/colorTessuroPrimary"
                     android:text="Name" />
 
             </LinearLayout>
@@ -86,7 +86,7 @@
                     android:textSize="16sp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:drawableTint="@color/colorTessuro"
+                    android:drawableTint="@color/colorTessuroPrimary"
                     android:text="Email" />
 
             </LinearLayout>
@@ -107,7 +107,7 @@
                     android:textSize="16sp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:drawableTint="@color/colorTessuro"
+                    android:drawableTint="@color/colorTessuroPrimary"
                     android:text="Role this sis a really long meessage lets see what happens" />
 
             </LinearLayout>
@@ -128,7 +128,7 @@
                     android:textSize="16sp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:drawableTint="@color/colorTessuro"
+                    android:drawableTint="@color/colorTessuroPrimary"
                     android:text="Created" />
 
             </LinearLayout>
