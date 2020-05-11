@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.csulb.tessuro.models.UserModel;
+import com.csulb.tessuro.utils.DialogUtils;
 import com.csulb.tessuro.utils.SystemUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,7 +42,12 @@ public class ProfileUpdateFragment extends Fragment {
         updateFullname_button = view.findViewById(R.id.updateFullname_button);
 
         handleUpdateFullname();
+        handleUpdatePassword();
         return view;
+    }
+
+    private void handleUpdatePassword() {
+
     }
 
     private void handleUpdateFullname() {
@@ -83,17 +89,22 @@ public class ProfileUpdateFragment extends Fragment {
                         // update the user model
                         UserModel userModel = new UserModel(requireActivity().getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
                         userModel.setFullname(fullname);
+
+                        // success dialog
+                        DialogUtils dialogUtils = new DialogUtils();
+                        dialogUtils.successDialog(requireActivity(),"Name updated to " + fullname);
+                        dialogUtils.showDialog();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "onFailure: updateFullname" + e.getMessage());
-                        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(requireActivity());
-                        dialogBuilder.setTitle("Error updating name");
-                        dialogBuilder.setIcon(R.drawable.ic_error);
-                        dialogBuilder.setMessage(e.getMessage());
-                        dialogBuilder.show();
+
+                        // error dialog
+                        DialogUtils dialogUtils = new DialogUtils();
+                        dialogUtils.errorDialog(requireActivity(), "Name could not be updated");
+                        dialogUtils.showDialog();
                     }
                 });
     }
