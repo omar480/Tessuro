@@ -13,6 +13,11 @@ public class UserModel {
     private String created;
 
     private SharedPreferences sharedPreferences;
+    private final String FULLNAME = "fullname";
+    private final String EMAIL = "email";
+    private final String ROLE = "role";
+    private final String CREATED = "created";
+    private final String IMGURL = "imgUrl";
 
     public UserModel(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -20,61 +25,60 @@ public class UserModel {
 
     public void setUser(String fullname, String email, String role, String created) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putString("fullname", fullname);
-        editor.putString("email", email);
-        editor.putString("role", role);
-        editor.putString("created", created);
+        editor.putString(FULLNAME, fullname);
+        editor.putString(EMAIL, email);
+        editor.putString(ROLE, role);
+        editor.putString(CREATED, created);
         editor.apply();
     }
 
     public void setFullname(String fullname) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putString("fullname", this.fullname);
+        editor.putString(FULLNAME, this.fullname);
         editor.apply();
     }
 
     public void setEmail(String email) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putString("email", this.email);
+        editor.putString(EMAIL, this.email);
         editor.apply();
     }
 
     public void setRole(String role) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putString("role", this.role);
+        editor.putString(ROLE, this.role);
         editor.apply();
     }
 
     public void setImgUrl(String imgUrl) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putString("imgUrl", this.imgUrl);
+        editor.putString(IMGURL, this.imgUrl);
         editor.apply();
     }
 
     public void setCreated(String created) {
         SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.putString("created", this.created);
+        editor.putString(CREATED, this.created);
         editor.apply();
     }
 
     public String getFullname() {
-        System.out.println("called");
-        return this.sharedPreferences.getString("fullname", "");
+        return this.sharedPreferences.getString(FULLNAME, "");
     }
 
     public String getEmail() {
-        return this.sharedPreferences.getString("email", "");
+        return this.sharedPreferences.getString(EMAIL, "");
     }
 
     public String getRole() {
-        return this.sharedPreferences.getString("role", "");
+        return this.sharedPreferences.getString(ROLE, "");
     }
 
     public String getImgUrl() {
-        return this.sharedPreferences.getString("imgUrl", "");
+        return this.sharedPreferences.getString(IMGURL, "");
     }
 
     public String getCreated() {
-        return this.sharedPreferences.getString("created", "");
+        return this.sharedPreferences.getString(CREATED, "");
     }
 }
