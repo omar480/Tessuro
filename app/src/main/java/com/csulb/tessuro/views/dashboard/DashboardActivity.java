@@ -48,6 +48,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HelpFragment()).commit();
                 break;
         }
+
+        switch (item.getItemId()){
+            case R.id.nav_about:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
+                break;
+        }
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

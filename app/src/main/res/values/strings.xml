@@ -16,4 +16,8 @@
 
     <!-- Welcome Activity -->
     <string name="welcomeMessage">Welcome to Tessuro! A quiz system for both instructors and students</string>
+
+    <!-- About us Activity -->
+    <string name="aboutUsMessage">Creators:\nOmar Perez \nMurtuza Bharoocha\n\nCECS 453\nAJ Fahim</string>
+
 </resources>

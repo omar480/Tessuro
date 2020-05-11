@@ -73,8 +73,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 //            startActivity(intent);
 //        } else {
             Log.e(TAG, "Not logged in");
-            Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-            startActivity(intent);
+            //Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+        Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+
+        startActivity(intent);
 //        }
     }
 }
