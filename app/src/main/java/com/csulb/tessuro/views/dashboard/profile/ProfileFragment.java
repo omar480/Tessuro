@@ -43,15 +43,10 @@ public class ProfileFragment extends Fragment {
         ProfileInfoFragment profileInfoFragment = new ProfileInfoFragment();
         ProfileUpdateFragment profileUpdateFragment = new ProfileUpdateFragment();
 
-
-        Objects.requireNonNull(profile_tabLayout.getTabAt(0)).setIcon(R.drawable.ic_info);
-        Objects.requireNonNull(profile_tabLayout.getTabAt(1)).setIcon(R.drawable.ic_update);
-
         // combine tab layout and view pager together
         profile_tabLayout.setupWithViewPager(profile_viewPager);
 
         // create the view page adapter and attach the child frag manager
-        assert getFragmentManager() != null;
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getChildFragmentManager(), 0);
         viewPageAdapter.addFragment(profileInfoFragment, "Info");
         viewPageAdapter.addFragment(profileUpdateFragment, "Update");

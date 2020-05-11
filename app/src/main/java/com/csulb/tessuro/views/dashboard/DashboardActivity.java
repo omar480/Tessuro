@@ -32,7 +32,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         String fullname = userModel.getFullname();
         String email = userModel.getEmail();
         String role = userModel.getRole();
-        Log.e(TAG, "onCreate: " + fullname + email + role);
+        String created = userModel.getCreated();
+        Log.e(TAG, "onCreate: " + fullname + email + role + "  " + created);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

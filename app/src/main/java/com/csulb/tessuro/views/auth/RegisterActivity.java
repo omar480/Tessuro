@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -162,11 +163,12 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.e(TAG, "Create user with email and password success");
 
                         Map<String, Object> user = new HashMap<>(); // hashmap used to store the data in firestore
+                        final String created = Calendar.getInstance().getTime().toString();
 
                         user.put("fullname", fullname);
                         user.put("email", email);
                         user.put("role", role);
-                        user.put("createdAt", new Date());
+                        user.put("createdAt", created);
 
                         // adding the user to the users collection
                         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -181,7 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                         // maintain the user
                                         UserModel userModel = new UserModel(getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
-                                        userModel.setUser(fullname, email, role);
+                                        userModel.setUser(fullname, email, role, created);
 
                                         // start the dashboard and pass the user info
                                         Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);

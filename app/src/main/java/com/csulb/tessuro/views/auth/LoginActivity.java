@@ -116,9 +116,10 @@ public class LoginActivity extends AppCompatActivity {
                     // get the data from firebase
                     String fullname = Objects.requireNonNull(documentSnapshot.get("fullname")).toString();
                     String role = Objects.requireNonNull(documentSnapshot.get("role")).toString();
+                    String created = Objects.requireNonNull(documentSnapshot.get("createdAt")).toString();
 
                     UserModel userModel = new UserModel(getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
-                    userModel.setUser(fullname, email, role);
+                    userModel.setUser(fullname, email, role, created);
 
                     // start the dashboard
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
