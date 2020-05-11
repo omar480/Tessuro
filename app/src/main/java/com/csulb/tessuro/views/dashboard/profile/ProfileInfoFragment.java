@@ -1,4 +1,4 @@
-package com.csulb.tessuro;
+package com.csulb.tessuro.views.dashboard.profile;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;

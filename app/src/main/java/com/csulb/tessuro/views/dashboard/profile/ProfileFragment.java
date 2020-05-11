@@ -1,6 +1,5 @@
 package com.csulb.tessuro.views.dashboard.profile;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,23 +7,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.csulb.tessuro.ProfileInfoFragment;
-import com.csulb.tessuro.ProfileUpdateFragment;
 import com.csulb.tessuro.R;
-import com.csulb.tessuro.views.dashboard.DashboardActivity;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
 

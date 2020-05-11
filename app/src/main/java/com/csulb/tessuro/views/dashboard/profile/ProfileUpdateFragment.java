@@ -1,4 +1,4 @@
-package com.csulb.tessuro;
+package com.csulb.tessuro.views.dashboard.profile;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.UserModel;
 import com.csulb.tessuro.utils.AuthUtils;
 import com.csulb.tessuro.utils.DialogUtils;
