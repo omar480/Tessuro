@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.UserModel;
+import com.csulb.tessuro.views.dashboard.about.AboutUsFragment;
 import com.csulb.tessuro.views.dashboard.help.HelpFragment;
+import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
 import com.csulb.tessuro.views.dashboard.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -37,7 +39,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);       // apply the toolbar as an action bar
@@ -80,11 +81,17 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
+            case R.id.nav_home_page:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeStudentFragment()).commit();
+                break;
             case R.id.nav_account_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 break;
             case R.id.nav_help:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HelpFragment()).commit();
+                break;
+            case R.id.nav_about:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutUsFragment()).commit();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

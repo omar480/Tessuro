@@ -26,7 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         slogan_textView = findViewById(R.id.slogan_textView);
         login_button = findViewById(R.id.login_button);
-        register_button = findViewById(R.id.register_button);
+        register_button = findViewById(R.id.submitTakeQuiz_button);
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/oswald/Oswald-Regular.ttf");
         slogan_textView.setTypeface(typeface);

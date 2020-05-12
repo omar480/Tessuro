@@ -1,4 +1,4 @@
-package com.csulb.tessuro.views.dashboard.help;
+package com.csulb.tessuro.views.dashboard.about;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -13,17 +13,21 @@ import androidx.fragment.app.Fragment;
 
 import com.csulb.tessuro.R;
 
-public class HelpFragment extends Fragment {
+public class AboutUsFragment extends Fragment
+{
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.help_fragment, container, false);
 
-        TextView txt = v.findViewById(R.id.help_textview);
+        View v = inflater.inflate(R.layout.fragment_about, container, false);
+
+        TextView txt = v.findViewById(R.id.aboutUs_tv);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(),"fonts/oswald/Oswald-Regular.ttf");
         txt.setTypeface(font);
 
         return v;
     }
+
 }

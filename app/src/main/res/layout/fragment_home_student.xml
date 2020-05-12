@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/tessuro_logo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="25dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/quiz" />
+
+        <TextView
+            android:id="@+id/student_homepage_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/take_a_quiz"
+            android:textAlignment="center"
+            android:textColor="@color/colorTessuroPrimary"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/homeEmail_textField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="311dp"
+            android:layout_height="68dp"
+            android:hint="@string/email"
+            app:boxBackgroundMode="outline"
+            android:layout_marginTop="16dp"
+            app:boxStrokeColor="@color/colorTessuroPrimary"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/colorTessuroPrimary"
+            app:startIconDrawable="@drawable/ic_email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/key_textField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="311dp"
+            android:layout_height="68dp"
+            android:hint="@string/key"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/colorTessuroPrimary"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/colorTessuroPrimary"
+            app:startIconDrawable="@drawable/ic_key">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submitTakeQuiz_button"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="311dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:minHeight="60dp"
+            android:text="@string/submit"
+            android:textSize="16sp"
+            app:backgroundTint="@color/colorTessuroPrimary"
+            app:icon="@drawable/ic_done"
+            app:iconGravity="textStart" />
+
+        <ImageButton
+            android:id="@+id/help_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_help" />
+    </LinearLayout>
+</ScrollView>
+

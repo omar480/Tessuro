@@ -3,7 +3,6 @@ package com.csulb.tessuro.views.auth;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -57,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         email_editText = findViewById(R.id.email_textField);
         pass_editText = findViewById(R.id.pass_textField);
         retypePass_editText = findViewById(R.id.retypePass_textField);
-        register_button = findViewById(R.id.register_button);
+        register_button = findViewById(R.id.submitTakeQuiz_button);
         admin_radioButton = findViewById(R.id.admin_radioButton);
 
         auth = FirebaseAuth.getInstance();
