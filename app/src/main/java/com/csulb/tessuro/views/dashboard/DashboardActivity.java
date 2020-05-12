@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import com.csulb.tessuro.views.dashboard.help.HelpFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
 import com.csulb.tessuro.views.dashboard.profile.ProfileFragment;
+import com.csulb.tessuro.views.intro.WelcomeActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -102,9 +104,19 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             case R.id.nav_about:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutUsFragment()).commit();
                 break;
+            case R.id.nav_logout:
+                handleLogout();
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void handleLogout() {
+        auth.signOut();
+        Intent intent = new Intent(DashboardActivity.this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();   // prevent user from coming back
     }
 
     /**
