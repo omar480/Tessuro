@@ -51,4 +51,9 @@
 
     <!-- Help fragment -->
     <string name="help_message">Error 404\nHelp information not found</string>
+    <string name="admin_quiz">Create a Quiz</string>
+    <string name="enter_quiz_name">Enter Quiz Name</string>
+    <string name="enter_quiz_key">Enter a Quiz Key</string>
+    <string name="create_quiz">Create Quiz</string>
+    <string name="next_step">Next Step</string>
 </resources>
