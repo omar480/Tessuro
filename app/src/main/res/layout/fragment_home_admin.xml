@@ -53,22 +53,41 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/createQuizKey_textField"
+        android:id="@+id/createQuizKey_textField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="311dp"
+        android:layout_height="68dp"
+        android:hint="@string/enter_quiz_key"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/colorTessuroPrimary"
+        app:endIconMode="clear_text"
+        app:hintTextColor="@color/colorTessuroPrimary"
+        app:startIconDrawable="@drawable/ic_quiz_key">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLength="10"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createQuizNumQues_textField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="311dp"
             android:layout_height="68dp"
-            android:hint="@string/enter_quiz_key"
+            android:hint="@string/number_of_questions"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/colorTessuroPrimary"
             app:endIconMode="clear_text"
             app:hintTextColor="@color/colorTessuroPrimary"
-            app:startIconDrawable="@drawable/ic_quiz_key">
+            app:startIconDrawable="@drawable/ic_number_questions">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLength="10"/>
+                android:inputType="number"
+                android:maxLength="2"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <RadioGroup
