@@ -25,8 +25,8 @@ public class DialogUtils {
 
     public void infoDialog(Activity activity, String message) {
         this.dialogBuilder = new MaterialAlertDialogBuilder(activity);
-        this.dialogBuilder.setTitle("Information");
-        this.dialogBuilder.setIcon(R.drawable.ic_info);
+        this.dialogBuilder.setTitle("Help");
+        this.dialogBuilder.setIcon(R.drawable.ic_help);
         this.dialogBuilder.setMessage(message);
     }
 
