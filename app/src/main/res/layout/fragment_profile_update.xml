@@ -177,6 +177,7 @@
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="311dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:minHeight="60dp"
                 android:text="@string/select_image"
                 android:textSize="16sp"
