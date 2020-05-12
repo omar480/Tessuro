@@ -22,12 +22,14 @@ import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
 import com.csulb.tessuro.views.dashboard.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+    private FirebaseAuth auth;
 
     // from nav_header xml
     private CircleImageView navImage_imageView;
@@ -39,6 +41,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        auth = FirebaseAuth.getInstance();  // get firebase instance
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);       // apply the toolbar as an action bar
@@ -72,8 +76,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeAdminFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_help);
+
+            if (userModel.getRole().equals("Admin")) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeAdminFragment()).commit();
+            } else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeStudentFragment()).commit();
+            }
+            navigationView.setCheckedItem(R.id.nav_home);
         }
     }
 
@@ -81,10 +90,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.nav_home_page:
+            case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeStudentFragment()).commit();
                 break;
-            case R.id.nav_account_settings:
+            case R.id.nav_account_profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 break;
             case R.id.nav_help:
