@@ -76,8 +76,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) { // check if open
             drawer.closeDrawer(GravityCompat.START);    // close drawer
-        } else {
-            super.onBackPressed();  // drawer not open, continue as normal
         }
+        // do nothing else, button is disabled
     }
 }
