@@ -63,5 +63,12 @@
     <!-- Custom Popup -->
     <string name="popupmessage">Enter the Email Address and Key Provided by the Instructor</string>
 
+    <string name="admin_quiz">Create a Quiz</string>
+    <string name="enter_quiz_name">Enter Quiz Name</string>
+    <string name="enter_quiz_key">Enter a Quiz Key</string>
+    <string name="create_quiz">Create Quiz</string>
+    <string name="next_step">Next Step</string>
+    <string name="number_of_questions">Enter Number of Questions</string>
+    <string name="build_your_quiz">Build Your Quiz</string>
 
 </resources>

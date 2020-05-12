@@ -188,6 +188,8 @@ public class RegisterActivity extends AppCompatActivity {
                                         // start the dashboard and pass the user info
                                         Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);
                                         startActivity(intent);
+                                        finish();   // prevent from going back to welcome activity
+
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {

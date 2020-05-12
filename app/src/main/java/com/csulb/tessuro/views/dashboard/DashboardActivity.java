@@ -11,48 +11,69 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.UserModel;
 import com.csulb.tessuro.views.dashboard.about.AboutUsFragment;
 import com.csulb.tessuro.views.dashboard.help.HelpFragment;
-import com.csulb.tessuro.views.dashboard.homepage.HomeStudentFragment;
+import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
+import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
 import com.csulb.tessuro.views.dashboard.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+
+    // from nav_header xml
+    private CircleImageView navImage_imageView;
+
     private String TAG = DashboardActivity.class.getSimpleName();
     private static final String USER_SHARED_PREF = "user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        UserModel userModel = new UserModel(getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
-        String fullname = userModel.getFullname();
-        String email = userModel.getEmail();
-        String role = userModel.getRole();
-        String created = userModel.getCreated();
-        Log.i(TAG, "onCreate: " + fullname + " "  + email + " " + role + " " + created);
+        setContentView(R.layout.activity_dashboard);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);       // apply the toolbar as an action bar
 
-        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);  // apply listener for when an item is selected
 
+        // create the drawer
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+            
+        navImage_imageView = findViewById(R.id.navImage_imageView);
+
+        // get user information for drawer
+        View headerView = navigationView.getHeaderView(0);
+        TextView navEmail = headerView.findViewById(R.id.navEmail_textView);
+        TextView navRole = headerView.findViewById(R.id.navRole_textView);
+
+        UserModel userModel = new UserModel(getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
+        Log.i(TAG, "onCreate: email, role" + userModel.getEmail() + " " + userModel.getRole());
+
+        try {
+            // set the text views for the nav
+            navEmail.setText(userModel.getEmail());
+            navRole.setText(userModel.getRole());
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate: setting email & role in drawer -> " + e.getMessage());
+        }
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeStudentFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_home_page);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeAdminFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_help);
         }
     }
 
@@ -84,8 +105,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) { // check if open
             drawer.closeDrawer(GravityCompat.START);    // close drawer
-        } else {
-            super.onBackPressed();  // drawer not open, continue as normal
         }
+        // do nothing else, button is disabled
     }
 }

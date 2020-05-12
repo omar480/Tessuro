@@ -1,4 +1,4 @@
-package com.csulb.tessuro.views.dashboard.homepage;
+package com.csulb.tessuro.views.dashboard.home;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -3,6 +3,7 @@ package com.csulb.tessuro.views.auth;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -124,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                     // start the dashboard
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(intent);
+                    finish();   // prevent from going back to welcome activity
                 }
             });
     }

@@ -124,31 +124,31 @@ public class ProfileUpdateFragment extends Fragment {
 
         assert email != null;
         auth.signInWithEmailAndPassword(email, currPass)
-                .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.i(TAG, "Logging in user success");
+            .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Log.i(TAG, "Logging in user success");
 
-                            // update password
-                            user.updatePassword(newPass);
+                        // update password
+                        user.updatePassword(newPass);
 
-                            // remove text from fields
-                            currPass_textView.getEditText().setText("");
-                            newPass_textView.getEditText().setText("");
-                            retypeNewPass_textView.getEditText().setText("");
+                        // remove text from fields
+                        currPass_textView.getEditText().setText("");
+                        newPass_textView.getEditText().setText("");
+                        retypeNewPass_textView.getEditText().setText("");
 
-                            // success dialog
-                            DialogUtils dialogUtils = new DialogUtils();
-                            dialogUtils.successDialog(requireActivity(), "Password updated");
-                            dialogUtils.showDialog();
-                        } else {
-                            DialogUtils dialogUtils = new DialogUtils();
-                            dialogUtils.errorDialog(requireActivity(), Objects.requireNonNull(task.getException()).toString());
-                            dialogUtils.showDialog();
-                        }
+                        // success dialog
+                        DialogUtils dialogUtils = new DialogUtils();
+                        dialogUtils.successDialog(requireActivity(), "Password updated");
+                        dialogUtils.showDialog();
+                    } else {
+                        DialogUtils dialogUtils = new DialogUtils();
+                        dialogUtils.errorDialog(requireActivity(), Objects.requireNonNull(task.getException()).toString());
+                        dialogUtils.showDialog();
                     }
-                });
+                }
+            });
     }
 
     private void handleUpdateFullname() {
