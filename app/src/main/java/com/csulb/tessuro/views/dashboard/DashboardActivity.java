@@ -38,6 +38,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     private String TAG = DashboardActivity.class.getSimpleName();
     private static final String USER_SHARED_PREF = "user";
+    private UserModel userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         TextView navEmail = headerView.findViewById(R.id.navEmail_textView);
         TextView navRole = headerView.findViewById(R.id.navRole_textView);
 
-        UserModel userModel = new UserModel(getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
+        userModel = new UserModel(getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE));
         Log.i(TAG, "onCreate: email, role" + userModel.getEmail() + " " + userModel.getRole());
 
         try {
@@ -93,7 +94,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         switch (item.getItemId()) {
             case R.id.nav_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeStudentFragment()).commit();
+                if (userModel.getRole().equals("Admin")) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeAdminFragment()).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeStudentFragment()).commit();
+                }
                 break;
             case R.id.nav_account_profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
