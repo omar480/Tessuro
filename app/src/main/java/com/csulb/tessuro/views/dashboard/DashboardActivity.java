@@ -14,7 +14,9 @@ import android.view.MenuItem;
 
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.UserModel;
+import com.csulb.tessuro.views.dashboard.about.AboutUsFragment;
 import com.csulb.tessuro.views.dashboard.help.HelpFragment;
+import com.csulb.tessuro.views.dashboard.homepage.HomeStudentFragment;
 import com.csulb.tessuro.views.dashboard.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -48,21 +50,27 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HelpFragment()).commit();
-//            navigationView.setCheckedItem(R.id.nav_help);
-//        }
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  new HomeStudentFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_home_page);
+        }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
+            case R.id.nav_home_page:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeStudentFragment()).commit();
+                break;
             case R.id.nav_account_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 break;
             case R.id.nav_help:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HelpFragment()).commit();
+                break;
+            case R.id.nav_about:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutUsFragment()).commit();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

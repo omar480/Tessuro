@@ -23,6 +23,13 @@ public class DialogUtils {
         this.dialogBuilder.setMessage(message);
     }
 
+    public void infoDialog(Activity activity, String message) {
+        this.dialogBuilder = new MaterialAlertDialogBuilder(activity);
+        this.dialogBuilder.setTitle("Information");
+        this.dialogBuilder.setIcon(R.drawable.ic_info);
+        this.dialogBuilder.setMessage(message);
+    }
+
     public void showDialog() {
         this.dialogBuilder.show();
     }

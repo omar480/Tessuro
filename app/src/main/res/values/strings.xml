@@ -2,6 +2,7 @@
     <string name="app_name">Tessuro</string>
 
     <!-- drawer -->
+    <string name="home_page">Home</string>
     <string name="profile">Profile</string>
     <string name="quiz_preferences">Update Quiz Preferences</string>
     <string name="about">About</string>
@@ -51,4 +52,16 @@
 
     <!-- Help fragment -->
     <string name="help_message">Error 404\nHelp information not found</string>
+
+    <!-- About us Fragment -->
+    <string name="aboutUsMessage">Creators:\nOmar Perez \nMurtuza Bharoocha\n\nCECS 453\nAJ Fahim</string>
+
+    <!-- Student HomePage Fragment -->
+    <string name="key">Key</string>
+    <string name="submit">Submit</string>
+    <string name="Test">Test</string>
+    <!-- Custom Popup -->
+    <string name="popupmessage">Enter the Email Address and Key Provided by the Instructor</string>
+
+
 </resources>
