@@ -46,7 +46,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusedByDefault="true"
                 android:inputType="text"
                 android:maxLength="20"/>
 
@@ -101,7 +100,7 @@
 
             <RadioButton
                 android:id="@+id/trueFalse_radioButton"
-                android:layout_width="133dp"
+                android:layout_width="128dp"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorTessuroPrimary"
                 android:checked="true"
@@ -117,7 +116,7 @@
 
             <RadioButton
                 android:id="@+id/mix_radioButton"
-                android:layout_width="67dp"
+                android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorTessuroPrimary"
                 android:text="Mix" />

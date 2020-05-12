@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private AVLoadingIndicatorView progressbar;
     private TextInputLayout fullname_editText;
     private TextInputLayout email_editText;
     private TextInputLayout pass_editText;
@@ -51,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        progressbar = findViewById(R.id.registerProgress);
         fullname_editText = findViewById(R.id.fullname_textField);
         email_editText = findViewById(R.id.email_textField);
         pass_editText = findViewById(R.id.pass_textField);
@@ -59,6 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         admin_radioButton = findViewById(R.id.admin_radioButton);
 
         auth = FirebaseAuth.getInstance();
+        progressbar.hide();
         handleRegisterButton();
     }
 
@@ -153,6 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(final String fullname, final String email, final String pass, final String role) {
+        progressbar.smoothToShow();
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -209,6 +214,7 @@ public class RegisterActivity extends AppCompatActivity {
                         dialogBuilder.setMessage(Objects.requireNonNull(task.getException()).getMessage());
                         dialogBuilder.show();
                     }
+                    progressbar.hide();
                 }
             });
     }

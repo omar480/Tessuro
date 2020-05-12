@@ -15,6 +15,7 @@ import com.csulb.tessuro.models.UserModel;
 import com.csulb.tessuro.utils.SystemUtils;
 import com.csulb.tessuro.views.dashboard.DashboardActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -24,11 +25,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private AVLoadingIndicatorView progressbar;
     private TextInputLayout email_editText;
     private TextInputLayout pass_editText;
     private MaterialButton login_button;
@@ -41,11 +44,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        progressbar = findViewById(R.id.loginProgress);
         email_editText = findViewById(R.id.email_textField);
         pass_editText = findViewById(R.id.pass_textField);
         login_button = findViewById(R.id.login_button);
         auth = FirebaseAuth.getInstance();
 
+        progressbar.hide();
         handleLoginButton();
     }
 
@@ -82,6 +87,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(final String email, final String pass) {
+
+        progressbar.smoothToShow();
+
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -98,6 +106,8 @@ public class LoginActivity extends AppCompatActivity {
                         dialogBuilder.setIcon(R.drawable.ic_error);
                         dialogBuilder.setMessage(Objects.requireNonNull(task.getException()).getMessage());
                         dialogBuilder.show();
+
+                        progressbar.hide();
                     }
                 }
             });
@@ -126,7 +136,16 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(intent);
                     finish();   // prevent from going back to welcome activity
+                    progressbar.hide();
                 }
-            });
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "onFailure: " + e.getMessage());
+                    progressbar.hide();
+                }
+        });
+
     }
 }

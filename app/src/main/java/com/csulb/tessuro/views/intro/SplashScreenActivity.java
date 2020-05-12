@@ -26,7 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen_activity);
+        setContentView(R.layout.activity_splash_screen);
 
         mProgressbar = findViewById(R.id.splashProgress);
         userLoggedIn = false;

@@ -84,6 +84,21 @@
             app:layout_constraintTop_toBottomOf="@+id/pass_textField"
             app:layout_constraintVertical_bias="0.0" />
 
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/loginProgress"
+            style="@style/AVLoadingIndicatorView"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginBottom="68dp"
+            android:visibility="visible"
+            app:indicatorColor="@color/colorTessuroPrimary"
+            app:indicatorName="BallRotateIndicator"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_button"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
