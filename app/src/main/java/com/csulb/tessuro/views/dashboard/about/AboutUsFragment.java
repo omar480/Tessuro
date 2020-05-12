@@ -21,7 +21,7 @@ public class AboutUsFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.about_fragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_about, container, false);
 
         TextView txt = v.findViewById(R.id.aboutUs_tv);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(),"fonts/oswald/Oswald-Regular.ttf");

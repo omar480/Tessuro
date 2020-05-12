@@ -70,5 +70,6 @@
     <string name="next_step">Next Step</string>
     <string name="number_of_questions">Enter Number of Questions</string>
     <string name="build_your_quiz">Build Your Quiz</string>
+    <string name="take_a_quiz">Take a Quiz!</string>
 
 </resources>

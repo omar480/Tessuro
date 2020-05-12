@@ -142,7 +142,7 @@
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/register_button"
+            android:id="@+id/submitTakeQuiz_button"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_width="311dp"
             android:layout_height="wrap_content"

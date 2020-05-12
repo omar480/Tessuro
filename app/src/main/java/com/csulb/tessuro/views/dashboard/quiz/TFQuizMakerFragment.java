@@ -1,4 +1,4 @@
-package com.csulb.tessuro.views.dashboard.home.quiz;
+package com.csulb.tessuro.views.dashboard.quiz;
 
 import android.os.Bundle;
 
