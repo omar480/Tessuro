@@ -1,6 +1,7 @@
 package com.csulb.tessuro.views.dashboard.quiz;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 
@@ -16,13 +17,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.QuestionModel;
+import com.csulb.tessuro.models.UserModel;
 import com.csulb.tessuro.utils.DialogUtils;
+import com.csulb.tessuro.utils.SystemUtils;
+import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
+import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
@@ -40,6 +48,7 @@ import java.util.Objects;
 
 public class QuizMakerFragment extends Fragment {
     private String TAG = QuizMakerFragment.class.getSimpleName();
+    private static final String USER_SHARED_PREF = "user";
 
     private FirebaseAuth auth;
 
@@ -81,10 +90,10 @@ public class QuizMakerFragment extends Fragment {
         answerChoices.add("True");
         answerChoices.add("False");
 
-        // create the number of recycler views with default questionModel
+        // create the number of recycler views with default questionModel, defautl answer is True
         questionList = new ArrayList<>();
         for (int i = 0; i < Integer.parseInt(quizNum); i++) {
-            questionList.add(new QuestionModel(i, "x", answerChoices, "x"));
+            questionList.add(new QuestionModel(i, "x", answerChoices, "True"));
         }
 
         // recycler stuff
@@ -106,6 +115,13 @@ public class QuizMakerFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                try {
+                    SystemUtils systemUtils = new SystemUtils();
+                    systemUtils.hideSoftKeyboard(requireActivity());
+                } catch (Exception e) {
+                    Log.e(TAG, "onClick: keyboard wasn't open");
+                }
+
                 // make sure fields are valid
                 for (int i = 0; i < questionList.size(); i++) {
                     String question = questionList.get(i).getQuestion();
@@ -118,13 +134,12 @@ public class QuizMakerFragment extends Fragment {
                         return;
                     }
                 }
-
-                uploadQuiz();
+                uploadQuiz();   // fields are valid so upload questions
             }
         });
     }
 
-    public void uploadQuiz() {
+    private void uploadQuiz() {
 
         String authEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
         Log.e(TAG, "uploadQuiz: quthemail " + authEmail);
@@ -139,24 +154,34 @@ public class QuizMakerFragment extends Fragment {
         docData.put("createdBy", authEmail);
         docData.put("quizData", questionList);
 
-//        Map<String, Object> nestedDoc = new HashMap<>();
-//        nestedDoc.put("quizData", questionList);
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         assert authEmail != null;
         firestore
                 .collection("quizzes")
-                .document(authEmail)
+                .document() // create a unique key
                 .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.i(TAG, "onSuccess: docData added successfully");
+
+                        // go back to home
+                        String role = new UserModel(requireActivity().getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE)).getRole();
+
+                        if (role.equals("Admin")) {
+                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeAdminFragment()).commit();
+                        } else {
+                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeStudentFragment()).commit();
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.i(TAG, "onFailure: docData did not add");
+                        DialogUtils dialogUtils = new DialogUtils();
+                        dialogUtils.errorDialog(requireActivity(), "Failed to Create Quiz. Try Again.");
+                        dialogUtils.showDialog();
                     }
                 });
     }
