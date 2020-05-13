@@ -165,6 +165,7 @@ public class HomeStudentFragment extends Fragment {
                                 String numQuizQuestions = Objects.requireNonNull(document.get("numQuizQuestions")).toString();
                                 String quizType = Objects.requireNonNull(document.get("quizType")).toString();
                                 String allowedTime = Objects.requireNonNull(document.get("allowedTime")).toString();
+                                String docId = document.getId();
 
                                 // date object stuff
                                 Timestamp timestamp = (Timestamp) document.get("createdAt");
@@ -186,8 +187,6 @@ public class HomeStudentFragment extends Fragment {
                                 String ms = dateFormat.format(toDate);
                                 String createdAt = mdy + " at " + ms;
 
-                                Log.i(TAG, "onComplete: todate => " + createdAt);
-
                                 PrepareQuizFragment prepareQuizFragment = PrepareQuizFragment.newInstance(
                                         quizName,
                                         quizType,
@@ -195,7 +194,8 @@ public class HomeStudentFragment extends Fragment {
                                         createdBy,
                                         createdAt,
                                         allowedTime,
-                                        date
+                                        date,
+                                        docId
                                 );
 
                                 // start the prepare quiz fragment

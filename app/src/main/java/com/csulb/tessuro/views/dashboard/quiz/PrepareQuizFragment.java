@@ -4,21 +4,36 @@ import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.csulb.tessuro.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class PrepareQuizFragment extends Fragment {
+    private String TAG = PrepareQuizFragment.class.getSimpleName();
+    private FirebaseAuth auth;
+    private MaterialButton takeQuiz_button;
 
     // arguments keys
     private static final String QUIZ_NAME = "quizName";
@@ -28,6 +43,7 @@ public class PrepareQuizFragment extends Fragment {
     private static final String CREATED_AT = "createdAt";
     private static final String ALLOWED_TIME = "allowedTime";
     private static final String DATE = "date";
+    private static final String DOC_ID = "docId";
 
     // arguments
     private String quizName;
@@ -37,6 +53,7 @@ public class PrepareQuizFragment extends Fragment {
     private String createdAt;
     private String allowedTime;
     private int[] date;
+    private String docId;
 
     public PrepareQuizFragment() {
         // Required empty public constructor
@@ -44,7 +61,7 @@ public class PrepareQuizFragment extends Fragment {
 
     public static PrepareQuizFragment newInstance(String quizName, String quizType,
                                                   String numQuizQuestions, String createdBy,
-                                                  String createdAt, String allowedTime, int[] date) {
+                                                  String createdAt, String allowedTime, int[] date, String docId) {
         PrepareQuizFragment fragment = new PrepareQuizFragment();
         Bundle args = new Bundle();
 
@@ -55,6 +72,7 @@ public class PrepareQuizFragment extends Fragment {
         args.putString(CREATED_AT, createdAt);
         args.putString(ALLOWED_TIME, allowedTime);
         args.putIntArray(DATE, date);
+        args.putString(DOC_ID, docId);
 
         fragment.setArguments(args);
         return fragment;
@@ -71,6 +89,7 @@ public class PrepareQuizFragment extends Fragment {
             createdAt = getArguments().getString(CREATED_AT);
             allowedTime = getArguments().getString(ALLOWED_TIME);
             date = getArguments().getIntArray(DATE);
+            docId = getArguments().getString(DOC_ID);
         }
     }
 
@@ -78,6 +97,8 @@ public class PrepareQuizFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_prepare_quiz, container, false);
+
+        auth = FirebaseAuth.getInstance();
 
         TextView quizName_textView = view.findViewById(R.id.prepareQuizQuizName_textView);
         TextView quizType_textView = view.findViewById(R.id.prepareQuizQuizType_textView);
@@ -113,6 +134,41 @@ public class PrepareQuizFragment extends Fragment {
             a.get(i).setTypeface(typeface);
         }
 
+        takeQuiz_button = view.findViewById(R.id.prepareQuizTakeQuiz_button);
+        handleTakeQuiz();
+
         return view;
+    }
+
+    private void handleTakeQuiz() {
+        takeQuiz_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: button pressed");
+                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                firestore
+                        .collection("quizzes")
+                        .document(docId)                            // seJ2Z0iMJNAcdXIqiw3j for test@gmail.com
+                        .collection("quizData")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                               if (task.isSuccessful()) {
+                                   QuerySnapshot queryDocumentSnapshots = task.getResult();
+
+                                   for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                       Log.i(TAG, "onComplete: docID => " + document.getId());
+                                   }
+                               }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "onFailure: error");
+                    }
+                });
+            }
+        });
     }
 }
