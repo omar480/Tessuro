@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
@@ -35,7 +36,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.Document;
 import com.google.gson.JsonObject;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,10 +162,31 @@ public class HomeStudentFragment extends Fragment {
 
                                 String quizName = Objects.requireNonNull(document.get("quizName")).toString();
                                 String createdBy = Objects.requireNonNull(document.get("createdBy")).toString();
-                                String createdAt = Objects.requireNonNull(document.get("createdAt")).toString();
                                 String numQuizQuestions = Objects.requireNonNull(document.get("numQuizQuestions")).toString();
                                 String quizType = Objects.requireNonNull(document.get("quizType")).toString();
                                 String allowedTime = Objects.requireNonNull(document.get("allowedTime")).toString();
+
+                                // date object stuff
+                                Timestamp timestamp = (Timestamp) document.get("createdAt");
+
+                                Date toDate = timestamp.toDate();
+                                int day = toDate.getDay();
+                                int month = toDate.getMonth();
+                                int year = toDate.getYear();
+                                int minutes = toDate.getMinutes();
+                                int secs = toDate.getSeconds();
+                                int[] date = { day, month, year, minutes, secs };
+
+                                // passing date object as a string
+                                DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
+                                String mdy = dateFormat.format(toDate);
+
+                                // formatting the timestamp string
+                                dateFormat = android.text.format.DateFormat.getTimeFormat(getContext());
+                                String ms = dateFormat.format(toDate);
+                                String createdAt = mdy + " at " + ms;
+
+                                Log.i(TAG, "onComplete: todate => " + createdAt);
 
                                 PrepareQuizFragment prepareQuizFragment = PrepareQuizFragment.newInstance(
                                         quizName,
@@ -169,7 +194,8 @@ public class HomeStudentFragment extends Fragment {
                                         numQuizQuestions,
                                         createdBy,
                                         createdAt,
-                                        allowedTime
+                                        allowedTime,
+                                        date
                                 );
 
                                 // start the prepare quiz fragment

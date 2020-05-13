@@ -1,5 +1,6 @@
 package com.csulb.tessuro.views.dashboard.quiz;
 
+import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ public class PrepareQuizFragment extends Fragment {
     private static final String CREATED_BY = "createdBy";
     private static final String CREATED_AT = "createdAt";
     private static final String ALLOWED_TIME = "allowedTime";
+    private static final String DATE = "date";
 
     // arguments
     private String quizName;
@@ -34,6 +36,7 @@ public class PrepareQuizFragment extends Fragment {
     private String createdBy;
     private String createdAt;
     private String allowedTime;
+    private int[] date;
 
     public PrepareQuizFragment() {
         // Required empty public constructor
@@ -41,7 +44,7 @@ public class PrepareQuizFragment extends Fragment {
 
     public static PrepareQuizFragment newInstance(String quizName, String quizType,
                                                   String numQuizQuestions, String createdBy,
-                                                  String createdAt, String allowedTime) {
+                                                  String createdAt, String allowedTime, int[] date) {
         PrepareQuizFragment fragment = new PrepareQuizFragment();
         Bundle args = new Bundle();
 
@@ -51,6 +54,7 @@ public class PrepareQuizFragment extends Fragment {
         args.putString(CREATED_BY, createdBy);
         args.putString(CREATED_AT, createdAt);
         args.putString(ALLOWED_TIME, allowedTime);
+        args.putIntArray(DATE, date);
 
         fragment.setArguments(args);
         return fragment;
@@ -66,9 +70,11 @@ public class PrepareQuizFragment extends Fragment {
             createdBy = getArguments().getString(CREATED_BY);
             createdAt = getArguments().getString(CREATED_AT);
             allowedTime = getArguments().getString(ALLOWED_TIME);
+            date = getArguments().getIntArray(DATE);
         }
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_prepare_quiz, container, false);
@@ -80,19 +86,25 @@ public class PrepareQuizFragment extends Fragment {
         TextView createdAt_textView = view.findViewById(R.id.prepareQuizCreatedAt_textView);
         TextView allowedTime_textView = view.findViewById(R.id.prepareQuizAllowedTime_textView);
 
+        if (quizType.equals("TF")) {
+            quizType = "True/False";
+        } else if (quizType.equals("MC")) {
+            quizType = "Multiple Choice";
+        }
+
         quizName_textView.setText(quizName);
-        quizType_textView.setText(String.format("Type: %s", quizType));
-        numQuizQuestions_textView.setText(String.format("Number of Questions: %s", numQuizQuestions));
-        createdAt_textView.setText(String.format("Created At: %%s%s", createdAt));
-        createdBy_textView.setText(String.format("Created By: %s", createdBy));
-        allowedTime_textView.setText(String.format("Allowed Time: %s", allowedTime));
+        quizType_textView.setText(String.format("%s Type", quizType));
+        numQuizQuestions_textView.setText(String.format("%s Questions", numQuizQuestions));
+        createdAt_textView.setText(String.format("Created %s", createdAt));
+        createdBy_textView.setText(String.format("Created by %s", createdBy));
+        allowedTime_textView.setText(String.format("Your allowed time is %s minutes.", allowedTime));
 
         List<TextView> a = new ArrayList<>();
         a.add(quizName_textView);
         a.add(quizType_textView);
         a.add(numQuizQuestions_textView);
         a.add(createdBy_textView);
-//        a.add(createdAt_textView);
+        a.add(createdAt_textView);
         a.add(allowedTime_textView);
 
         Typeface typeface = Typeface.createFromAsset(requireActivity().getAssets(), "fonts/Kanit-Regular.ttf");

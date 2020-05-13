@@ -159,7 +159,7 @@ public class QuizMakerFragment extends Fragment {
         docData.put("quizType", quizType);
         docData.put("numQuizQuestions", quizNum);
         docData.put("allowedTime", quizTime);
-        docData.put("createdAt", new Timestamp(new Date()));
+        docData.put("createdAt", new Date());
         docData.put("createdBy", authEmail);
 
         final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
