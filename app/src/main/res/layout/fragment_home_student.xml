@@ -62,12 +62,14 @@
             app:boxStrokeColor="@color/colorTessuroPrimary"
             app:endIconMode="clear_text"
             app:hintTextColor="@color/colorTessuroPrimary"
-            app:startIconDrawable="@drawable/ic_key">
+            app:startIconDrawable="@drawable/ic_key"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="10"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
