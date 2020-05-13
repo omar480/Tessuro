@@ -8,6 +8,10 @@ public class QuestionModel {
     private ArrayList<String> answerChoices;
     private String answer;
 
+    public QuestionModel() {
+
+    }
+
     public QuestionModel(int questionNumber, String question, ArrayList<String> answerChoices, String answer) {
         this.questionNumber = questionNumber;
         this.question = question;

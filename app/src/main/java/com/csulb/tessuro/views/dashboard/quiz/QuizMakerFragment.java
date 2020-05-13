@@ -31,15 +31,24 @@ import com.csulb.tessuro.utils.DialogUtils;
 import com.csulb.tessuro.utils.SystemUtils;
 import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
+import com.google.firestore.v1.Document;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -144,7 +153,7 @@ public class QuizMakerFragment extends Fragment {
         String authEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
         Log.e(TAG, "uploadQuiz: quthemail " + authEmail);
 
-        Map<String, Object> docData = new HashMap<>();
+        final Map<String, Object> docData = new HashMap<>();
         docData.put("quizName", quizName);
         docData.put("quizKey", quizKey);
         docData.put("quizType", quizType);
@@ -152,36 +161,69 @@ public class QuizMakerFragment extends Fragment {
         docData.put("allowedTime", quizTime);
         docData.put("createdAt", new Timestamp(new Date()));
         docData.put("createdBy", authEmail);
-        docData.put("quizData", questionList);
 
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         assert authEmail != null;
+
+        final String docRef = firestore.collection("users").document().getId();
+        Log.i(TAG, "uploadQuiz: doc id => " + docRef);
+
         firestore
                 .collection("quizzes")
-                .document() // create a unique key
+                .document(docRef) // create a unique key
                 .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.i(TAG, "onSuccess: docData added successfully");
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.i(TAG, "onSuccess: docData added successfully into users collection");
 
-                        // go back to home
-                        String role = new UserModel(requireActivity().getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE)).getRole();
+                            WriteBatch batch = firestore.batch();
 
-                        if (role.equals("Admin")) {
-                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeAdminFragment()).commit();
-                        } else {
-                            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeStudentFragment()).commit();
+                            for (int i = 0; i < questionList.size(); i++) {
+                                Log.i(TAG, "onComplete: quesitonlist.getI => " + questionList.get(i).getQuestion());
+
+                                DocumentReference documentReference = firestore
+                                        .collection("quizzes")
+                                        .document(docRef)
+                                        .collection("quizData")
+                                        .document();
+                                batch.set(documentReference, questionList.get(i));
+                            }
+
+                            batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Log.i(TAG, "onComplete: batch complete, questions added " +
+                                            "successfully into users/quizData subcollection");
+
+                                    // go back to home
+                                    String role = new UserModel(requireActivity().getSharedPreferences(USER_SHARED_PREF, Context.MODE_PRIVATE)).getRole();
+
+                                    if (role.equals("Admin")) {
+                                        requireActivity()
+                                                .getSupportFragmentManager()
+                                                .beginTransaction()
+                                                .replace(R.id.fragment_container, new HomeAdminFragment())
+                                                .commit();
+                                    } else {
+                                        requireActivity()
+                                                .getSupportFragmentManager()
+                                                .beginTransaction()
+                                                .replace(R.id.fragment_container, new HomeStudentFragment())
+                                                .commit();
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.i(TAG, "onFailure: docData did not add");
+                                    DialogUtils dialogUtils = new DialogUtils();
+                                    dialogUtils.errorDialog(requireActivity(), "Failed to create quiz. Try Again.");
+                                    dialogUtils.showDialog();
+                                }
+                            });
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(TAG, "onFailure: docData did not add");
-                        DialogUtils dialogUtils = new DialogUtils();
-                        dialogUtils.errorDialog(requireActivity(), "Failed to Create Quiz. Try Again.");
-                        dialogUtils.showDialog();
                     }
                 });
     }
@@ -276,3 +318,5 @@ public class QuizMakerFragment extends Fragment {
         }
     }
 }
+
+
