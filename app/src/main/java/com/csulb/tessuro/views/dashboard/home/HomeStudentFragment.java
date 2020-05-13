@@ -2,6 +2,7 @@ package com.csulb.tessuro.views.dashboard.home;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +15,30 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.csulb.tessuro.R;
+import com.csulb.tessuro.models.QuestionModel;
 import com.csulb.tessuro.utils.DialogUtils;
 
 import com.csulb.tessuro.utils.QuizUtils;
 import com.csulb.tessuro.utils.SystemUtils;
+import com.csulb.tessuro.views.auth.LoginActivity;
+import com.csulb.tessuro.views.dashboard.quiz.PrepareQuizFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firestore.v1.Document;
+import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -118,38 +130,55 @@ public class HomeStudentFragment extends Fragment {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore
                 .collection("quizzes")
-                .whereEqualTo("createdBy", "test@gmail.com")
-                .whereEqualTo("quizKey", "123ABC")
+                .whereEqualTo("createdBy", email)
+                .whereEqualTo("quizKey", key)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            Log.i(TAG, "onComplete: Email and Key combination exist");
-                            Log.i(TAG, "onComplete: Result: " + task.getResult());
+                            Log.i(TAG, "onComplete: task is complete");
 
+                            QuerySnapshot queryDocumentSnapshots = task.getResult();
 
+                            assert queryDocumentSnapshots != null;
+
+                            Log.i(TAG, "onComplete: size => " + queryDocumentSnapshots.size());
+
+                            if (queryDocumentSnapshots.size() == 0) {
+                                DialogUtils dialogUtils = new DialogUtils();
+                                dialogUtils.errorDialog(requireActivity(), "The Combination Does Not Exist");
+                                dialogUtils.showDialog();
+                                Log.e(TAG, "onComplete: doesnt exist");
+                                return;
+                            }
+
+                            // the document exist, there is only 1 document
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+
+                                String quizName = Objects.requireNonNull(document.get("quizName")).toString();
+                                String createdBy = Objects.requireNonNull(document.get("createdBy")).toString();
+                                String createdAt = Objects.requireNonNull(document.get("createdAt")).toString();
+                                String numQuizQuestions = Objects.requireNonNull(document.get("numQuizQuestions")).toString();
+                                String quizType = Objects.requireNonNull(document.get("quizType")).toString();
+                                String allowedTime = Objects.requireNonNull(document.get("allowedTime")).toString();
+
+                                PrepareQuizFragment prepareQuizFragment = PrepareQuizFragment.newInstance(
+                                        quizName,
+                                        quizType,
+                                        numQuizQuestions,
+                                        createdBy,
+                                        createdAt,
+                                        allowedTime
+                                );
+
+                                // start the prepare quiz fragment
+                                requireActivity().getSupportFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container, prepareQuizFragment).commit();
+                            }
                         } else {
-                            Log.e(TAG, "onComplete: the email and key combination doesn't exist: " + task.getException());
+                            Log.e(TAG, "onComplete: task could not be completed => " + task.getException());
                         }
-                    }
-                });
-    }
-
-
-    private void fetchQuizData(final String key, final String email) {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore
-                .collection("quizzes")
-                .document(key)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Log.i(TAG, "Firestore got Key info successfully");
-
-                        String getKey = Objects.requireNonNull(documentSnapshot.get("quizKey")).toString();
-
                     }
                 });
     }
