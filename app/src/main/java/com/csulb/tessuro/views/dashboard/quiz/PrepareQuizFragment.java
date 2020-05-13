@@ -1,6 +1,8 @@
 package com.csulb.tessuro.views.dashboard.quiz;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -14,19 +16,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.csulb.tessuro.R;
+import com.csulb.tessuro.models.QuestionModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -154,13 +160,42 @@ public class PrepareQuizFragment extends Fragment {
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                               if (task.isSuccessful()) {
-                                   QuerySnapshot queryDocumentSnapshots = task.getResult();
+                                if (task.isSuccessful()) {
+                                    QuerySnapshot queryDocumentSnapshots = task.getResult();
 
-                                   for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                       Log.i(TAG, "onComplete: docID => " + document.getId());
-                                   }
-                               }
+                                    // put the questions into the arraylist
+                                    List<QuestionModel> questionList = new ArrayList<>();
+
+                                    // get the questions
+                                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+
+                                        Log.i(TAG, "onComplete: docID => " + document.getId());
+
+                                        QuestionModel questionModel = new QuestionModel();
+                                        questionModel.setQuestion(Objects.requireNonNull(document.get("question")).toString());
+                                        questionModel.setAnswer(Objects.requireNonNull(document.get("answer")).toString());
+                                        questionModel.setQuestionNumber(Integer.parseInt(Objects.requireNonNull(document.get("questionNumber")).toString()));
+                                        questionModel.setAnswerChoices((ArrayList<String>) document.get("answerChoices"));
+
+                                        // add it to our array list
+                                        questionList.add(questionModel);
+                                        Log.i(TAG, "onComplete: array => " + document.get("answerChoices"));
+                                    }
+
+                                    // saving the arraylist of objects
+                                    Gson gson = new Gson();
+                                    String json = gson.toJson(questionList);
+                                    Log.i(TAG, "onComplete: json => " + json);
+
+                                    SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("questions", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("QUESTION_KEY", json);
+                                    editor.apply();
+
+                                    // start the take quiz fragment
+                                    requireActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.fragment_container, new TakeQuizFragment()).commit();
+                                }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override

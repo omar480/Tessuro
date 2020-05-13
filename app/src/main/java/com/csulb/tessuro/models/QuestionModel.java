@@ -35,6 +35,10 @@ public class QuestionModel {
         return answer;
     }
 
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
     public void setQuestion(String question) {
         this.question = question;
     }
