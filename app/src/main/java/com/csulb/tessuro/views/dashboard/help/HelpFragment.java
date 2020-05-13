@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.csulb.tessuro.R;
 
+import java.util.Objects;
+
 public class HelpFragment extends Fragment {
 
     @Nullable
@@ -21,7 +23,7 @@ public class HelpFragment extends Fragment {
         View v =  inflater.inflate(R.layout.help_fragment, container, false);
 
         TextView txt = v.findViewById(R.id.help_textview);
-        Typeface font = Typeface.createFromAsset(getActivity().getAssets(),"fonts/oswald/Oswald-Regular.ttf");
+        Typeface font = Typeface.createFromAsset(requireActivity().getAssets(),"fonts/oswald/Oswald-Regular.ttf");
         txt.setTypeface(font);
 
         return v;

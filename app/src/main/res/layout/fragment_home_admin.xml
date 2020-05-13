@@ -47,28 +47,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:maxLength="20"/>
+                android:maxLength="20" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/createQuizKey_textField"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="311dp"
-        android:layout_height="68dp"
-        android:hint="@string/enter_quiz_key"
-        app:boxBackgroundMode="outline"
-        app:boxStrokeColor="@color/colorTessuroPrimary"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/colorTessuroPrimary"
-        app:startIconDrawable="@drawable/ic_quiz_key">
+            android:id="@+id/createQuizKey_textField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="311dp"
+            android:layout_height="68dp"
+            android:hint="@string/enter_quiz_key"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/colorTessuroPrimary"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/colorTessuroPrimary"
+            app:startIconDrawable="@drawable/ic_quiz_key">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLength="10"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLength="10" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/createQuizNumQues_textField"
@@ -86,7 +86,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="2"/>
+                android:maxLength="2" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createQuizTime_textField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="311dp"
+            android:layout_height="68dp"
+            android:hint="@string/quiz_time_in_minutes"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/colorTessuroPrimary"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/colorTessuroPrimary"
+            app:startIconDrawable="@drawable/ic_time">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="3" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <RadioGroup
@@ -104,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorTessuroPrimary"
                 android:checked="true"
-                android:text="T/F"
+                android:text="@string/true_false"
                 app:useMaterialThemeColors="false" />
 
             <RadioButton
@@ -112,14 +131,14 @@
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorTessuroPrimary"
-                android:text="MC" />
+                android:text="@string/multiple_choice" />
 
             <RadioButton
                 android:id="@+id/mix_radioButton"
                 android:layout_width="72dp"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorTessuroPrimary"
-                android:text="Mix" />
+                android:text="@string/mix" />
 
         </RadioGroup>
 

@@ -3,11 +3,7 @@ package com.csulb.tessuro.views.dashboard.home;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,19 +15,22 @@ import android.widget.TextView;
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.utils.DialogUtils;
 import com.csulb.tessuro.utils.QuizUtils;
-import com.csulb.tessuro.views.dashboard.help.HelpFragment;
+import com.csulb.tessuro.utils.SystemUtils;
+import com.csulb.tessuro.views.dashboard.quiz.QuizMakerFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class HomeAdminFragment extends Fragment {
 
     private TextView slogan_textView;
+    private FirebaseAuth auth;
     private TextInputLayout quizName_textField;
     private TextInputLayout quizKey_textField;
+    private TextInputLayout quizNum_textField;
+    private TextInputLayout quizTime_textField;
+
     private MaterialButton nextStep_button;
 
     private RadioButton tf_radioButton;
@@ -46,9 +45,14 @@ public class HomeAdminFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_admin, container, false);
+
         slogan_textView = view.findViewById(R.id.adminQuizSlogan_textView);
+
         quizName_textField = view.findViewById(R.id.createQuizName_textField);
         quizKey_textField = view.findViewById(R.id.createQuizKey_textField);
+        quizNum_textField = view.findViewById(R.id.createQuizNumQues_textField);
+        quizTime_textField = view.findViewById(R.id.createQuizTime_textField);
+
         nextStep_button = view.findViewById(R.id.createQuizNext_button);
         tf_radioButton = view.findViewById(R.id.trueFalse_radioButton);
         mc_radioButton = view.findViewById(R.id.multipleChoice_radioButton);
@@ -67,22 +71,52 @@ public class HomeAdminFragment extends Fragment {
             public void onClick(View v) {
 
                 try {
+                    SystemUtils systemUtils = new SystemUtils();
+                    systemUtils.hideSoftKeyboard(requireActivity());
+                } catch (Exception e) {
+                    Log.e(TAG, "onClick: keyboard isn't opened.");
+                }
+
+                try {
                     String quizName = quizName_textField.getEditText().getText().toString();
                     String quizKey = quizKey_textField.getEditText().getText().toString();
+                    String quizNum = quizNum_textField.getEditText().getText().toString();
+                    String quizTime = quizTime_textField.getEditText().getText().toString();
+
+                    Log.i(TAG, "onClick: quizName: " + quizName + ", quizkey: " + quizKey + ", quizNum: " + quizNum + ", quizTime: " + quizTime);
 
                     QuizUtils quizUtils = new QuizUtils();
-                    boolean quizName_valid = quizUtils.isTextLengthValid(quizName, 4, 20);
-                    boolean quizKey_valid = quizUtils.isTextLengthValid(quizKey, 4, 10);
+                    boolean quizName_valid = quizUtils.isTextLengthValid(quizName, 3, 20);
+                    boolean quizKey_valid = quizUtils.isTextLengthValid(quizKey, 3, 10);
 
-                    if (!quizName_valid || !quizKey_valid) {
+                    boolean quizNum_valid = false;
+                    boolean quizTime_valid = false;
+
+                    if (quizNum.length() > 0) {
+                        quizNum_valid = quizUtils.isNumberValid(Integer.parseInt(quizNum), 1, 99);
+                    }
+
+                    if (quizTime.length() > 0) {
+                        quizTime_valid = quizUtils.isNumberValid(Integer.parseInt(quizTime), 1, 999);
+                    }
+
+                    if (!quizName_valid || !quizKey_valid || !quizNum_valid || !quizTime_valid) {
+
                         DialogUtils dialogUtils = new DialogUtils();
-                        String message = "Minimum quiz name and key length is 4";
-                        dialogUtils.errorDialog(requireActivity(), message);
+                        if (!quizName_valid) {
+                            dialogUtils.errorDialog(requireActivity(), "Quiz Name Must Have 3 or More Characters.");
+                        } else if (!quizKey_valid) {
+                            dialogUtils.errorDialog(requireActivity(), "Quiz Key Must Have 3 or More Characters.");
+                        } else if (!quizNum_valid) {
+                            dialogUtils.errorDialog(requireActivity(), "You Must Have at Least 1 Question.");
+                        } else {
+                            dialogUtils.errorDialog(requireActivity(), "Quiz Time Must Be at Least 1 Minute");  // quiz time
+                        }
                         dialogUtils.showDialog();
                         return;
                     }
 
-                    String quizType = determineSelectedQuizType();
+                    String quizType = determineSelectedQuizType();      // determine quiz type
 
                     if (quizType.equals(MIX) || quizType.equals(MC)) {
                         DialogUtils dialogUtils = new DialogUtils();
@@ -91,8 +125,19 @@ public class HomeAdminFragment extends Fragment {
                         dialogUtils.showDialog();
                         return;
                     }
+
                     // if all valid, start the next fragment
-                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HelpFragment()).commit();
+                    // pass the information to the new create quiz fragment
+                    QuizMakerFragment quizMakerFragment = new QuizMakerFragment();
+                    Bundle args = new Bundle();
+                    args.putString("QUIZ_NAME", quizName);
+                    args.putString("QUIZ_KEY", quizKey);
+                    args.putString("QUIZ_NUM", quizNum);
+                    args.putString("QUIZ_TIME", quizTime);
+                    args.putString("QUIZ_TYPE", quizType);
+                    quizMakerFragment.setArguments(args);
+
+                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, quizMakerFragment).commit();
 
                 } catch (Exception e) {
                     Log.e(TAG, "onClick: handleNextStep -> " + e.getMessage());
@@ -113,38 +158,6 @@ public class HomeAdminFragment extends Fragment {
         }
         Log.i(TAG, "determineSelectedQuizType: quiztype" + quizType);
         return quizType;
-    }
-
-    private static class ViewPageAdapter extends FragmentPagerAdapter {
-
-        private List<Fragment> fragmentList = new ArrayList<>();
-        private List<String> fragmentTitles = new ArrayList<>();
-
-        ViewPageAdapter(@NonNull FragmentManager fm, int behavior) {
-            super(fm, behavior);
-        }
-
-        void addFragment(Fragment fragment, String title) {
-            fragmentList.add(fragment);
-            fragmentTitles.add(title);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return fragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragmentList.size();
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return fragmentTitles.get(position);
-        }
     }
 
     public HomeAdminFragment() {

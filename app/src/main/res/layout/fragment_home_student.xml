@@ -38,9 +38,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="311dp"
             android:layout_height="68dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/email"
             app:boxBackgroundMode="outline"
-            android:layout_marginTop="16dp"
             app:boxStrokeColor="@color/colorTessuroPrimary"
             app:endIconMode="clear_text"
             app:hintTextColor="@color/colorTessuroPrimary"
@@ -83,13 +83,16 @@
             app:icon="@drawable/ic_done"
             app:iconGravity="textStart" />
 
-        <ImageButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/help_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_help" />
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:icon="@drawable/ic_help"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="30sp" />
+
     </LinearLayout>
 </ScrollView>
 

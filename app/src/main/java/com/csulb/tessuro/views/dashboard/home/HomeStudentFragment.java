@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.utils.DialogUtils;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class HomeStudentFragment extends Fragment
@@ -23,7 +24,7 @@ public class HomeStudentFragment extends Fragment
     private TextInputLayout email_editText;
     private TextInputLayout key_editText;
 
-    ImageButton imageButton;
+    private MaterialButton imageButton;
 
     @Nullable
     @Override
