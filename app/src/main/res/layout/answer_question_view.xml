@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="50dp"
+    android:paddingBottom="20dp">
+
+    <TextView
+        android:id="@+id/answerQuestionViewNumber_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="12dp"
+        android:text="Question x"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/answerQuestionView_textView"
+        android:layout_width="311dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/question"
+        android:paddingVertical="10dp"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/colorTessuroPrimary"
+        app:counterMaxLength="220"
+        app:endIconMode="clear_text"
+        app:hintTextColor="@color/colorTessuroPrimary" />
+
+    <RadioGroup
+        android:id="@+id/answerQuestionViewTrueFalse_radioGroup"
+        android:layout_width="310dp"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/retypePass_textField">
+
+        <RadioButton
+            android:id="@+id/answerQuestionViewTrue_radioButton"
+            android:layout_width="155dp"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorTessuroPrimary"
+            android:checked="true"
+            android:text="@string/quiz_true"
+            app:useMaterialThemeColors="false" />
+
+        <RadioButton
+            android:id="@+id/answerQuestionViewFalse_radioButton"
+            android:layout_width="155dp"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorTessuroPrimary"
+            android:text="@string/quiz_false" />
+
+    </RadioGroup>
+</LinearLayout>

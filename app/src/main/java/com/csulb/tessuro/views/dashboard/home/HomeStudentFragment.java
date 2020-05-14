@@ -2,7 +2,6 @@ package com.csulb.tessuro.views.dashboard.home;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,36 +14,23 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.csulb.tessuro.R;
-import com.csulb.tessuro.models.QuestionModel;
 import com.csulb.tessuro.utils.DialogUtils;
 
 import com.csulb.tessuro.utils.QuizUtils;
 import com.csulb.tessuro.utils.SystemUtils;
-import com.csulb.tessuro.views.auth.LoginActivity;
 import com.csulb.tessuro.views.dashboard.quiz.PrepareQuizFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firestore.v1.Document;
-import com.google.gson.JsonObject;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -64,18 +50,18 @@ public class HomeStudentFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home_student, container, false);
         auth = FirebaseAuth.getInstance();
-        progress = view.findViewById(R.id.takeQuizProgress);
+        progress = view.findViewById(R.id.studentHomeProgress);
         progress.hide();
 
         // Title of Page
-        TextView txt = view.findViewById(R.id.student_homepage_title);
+        TextView txt = view.findViewById(R.id.studentHomeSlogan_textView);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/oswald/Oswald-Regular.ttf");
         txt.setTypeface(font);
 
-        email_editText = view.findViewById(R.id.takeQuizEmail_editText);
-        key_editText = view.findViewById(R.id.takeQuizKey_editText);
-        takeQuiz_button = view.findViewById(R.id.takeQuizSubmit_button);
-        help_button = view.findViewById(R.id.takeQuizHelp_button);
+        email_editText = view.findViewById(R.id.studentHomeEmail_editText);
+        key_editText = view.findViewById(R.id.studentHomeKey_editText);
+        takeQuiz_button = view.findViewById(R.id.studentHomeSubmit_button);
+        help_button = view.findViewById(R.id.studentHomeHelp_button);
 
         handleTakeQuiz();
         handleHelp();
