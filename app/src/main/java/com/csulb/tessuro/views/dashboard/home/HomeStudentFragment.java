@@ -35,6 +35,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.Document;
 import com.google.gson.JsonObject;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class HomeStudentFragment extends Fragment {
     private EditText key_editText;
     private MaterialButton takeQuiz_button;
     private MaterialButton help_button;
+    private AVLoadingIndicatorView progress;
 
     @Nullable
     @Override
@@ -61,6 +63,8 @@ public class HomeStudentFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home_student, container, false);
         auth = FirebaseAuth.getInstance();
+        progress = view.findViewById(R.id.takeQuizProgress);
+        progress.hide();
 
         // Title of Page
         TextView txt = view.findViewById(R.id.student_homepage_title);
@@ -90,30 +94,34 @@ public class HomeStudentFragment extends Fragment {
                     Log.e(TAG, "onClick: The keyboard isn't opened.");
                 }
 
-                String email = email_editText.getText().toString();
-                String key = key_editText.getText().toString();
+                try {
+                    String email = email_editText.getText().toString();
+                    String key = key_editText.getText().toString();
 
-                QuizUtils quizUtils = new QuizUtils();
+                    QuizUtils quizUtils = new QuizUtils();
 
-                boolean key_valid = quizUtils.isTextLengthValid(key, 3, 10);
+                    boolean key_valid = quizUtils.isTextLengthValid(key, 3, 10);
 
-                Log.i(TAG, "onClick: " + "email " + email + " key " + key);
+                    Log.i(TAG, "onClick: " + "email " + email + " key " + key);
 
-                if (email.length() == 0) {
-                    DialogUtils dialogUtils = new DialogUtils();
-                    dialogUtils.errorDialog(requireActivity(), "You Must Enter the Instructor's Email.");
-                    dialogUtils.showDialog();
-                    return;
+                    if (email.length() == 0) {
+                        DialogUtils dialogUtils = new DialogUtils();
+                        dialogUtils.errorDialog(requireActivity(), "You Must Enter the Instructor's Email.");
+                        dialogUtils.showDialog();
+                        return;
+                    }
+
+                    if (!key_valid) {
+                        DialogUtils dialogUtils = new DialogUtils();
+                        dialogUtils.errorDialog(requireActivity(), "A Key Must be a Length of 3 to 10 Characters.");
+                        dialogUtils.showDialog();
+                        return;
+                    }
+
+                    verifyEmailAndKey(email, key);
+                } catch (Exception e) {
+                    Log.e(TAG, "onClick: " + e.getMessage());
                 }
-
-                if (!key_valid) {
-                    DialogUtils dialogUtils = new DialogUtils();
-                    dialogUtils.errorDialog(requireActivity(), "A Key Must be a Length of 3 to 10 Characters.");
-                    dialogUtils.showDialog();
-                    return;
-                }
-
-                verifyEmailAndKey(email, key);
             }
         });
     }
@@ -131,6 +139,9 @@ public class HomeStudentFragment extends Fragment {
     }
 
     private void verifyEmailAndKey(String email, String key) {
+
+        progress.smoothToShow();
+
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore
                 .collection("quizzes")
@@ -204,6 +215,7 @@ public class HomeStudentFragment extends Fragment {
                             }
                         } else {
                             Log.e(TAG, "onComplete: task could not be completed => " + task.getException());
+                            progress.smoothToHide();
                         }
                     }
                 });
