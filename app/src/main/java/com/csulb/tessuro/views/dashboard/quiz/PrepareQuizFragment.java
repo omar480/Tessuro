@@ -26,13 +26,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.wang.avi.AVLoadingIndicatorView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -150,6 +147,9 @@ public class PrepareQuizFragment extends Fragment {
         takeQuiz_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                takeQuiz_button.setEnabled(false);
+
                 Log.i(TAG, "onClick: button pressed");
                 FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                 firestore
@@ -195,14 +195,19 @@ public class PrepareQuizFragment extends Fragment {
                                     // start the take quiz fragment
                                     requireActivity().getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.fragment_container, new TakeQuizFragment()).commit();
+                                } else {
+                                    Log.e(TAG, "onComplete: unsuccessful");
+                                    takeQuiz_button.setEnabled(true);;
                                 }
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: error");
-                    }
-                });
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "onFailure: ");
+                                takeQuiz_button.setEnabled(true);
+                            }
+                        });
             }
         });
     }

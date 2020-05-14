@@ -23,6 +23,7 @@ import com.csulb.tessuro.utils.SystemUtils;
 import com.csulb.tessuro.views.auth.LoginActivity;
 import com.csulb.tessuro.views.dashboard.quiz.PrepareQuizFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -87,6 +88,8 @@ public class HomeStudentFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                takeQuiz_button.setEnabled(false);
+
                 try {
                     SystemUtils systemUtils = new SystemUtils();
                     systemUtils.hideSoftKeyboard(requireActivity());
@@ -108,6 +111,7 @@ public class HomeStudentFragment extends Fragment {
                         DialogUtils dialogUtils = new DialogUtils();
                         dialogUtils.errorDialog(requireActivity(), "You Must Enter the Instructor's Email.");
                         dialogUtils.showDialog();
+                        takeQuiz_button.setEnabled(true);
                         return;
                     }
 
@@ -115,6 +119,7 @@ public class HomeStudentFragment extends Fragment {
                         DialogUtils dialogUtils = new DialogUtils();
                         dialogUtils.errorDialog(requireActivity(), "A Key Must be a Length of 3 to 10 Characters.");
                         dialogUtils.showDialog();
+                        takeQuiz_button.setEnabled(true);
                         return;
                     }
 
@@ -139,7 +144,6 @@ public class HomeStudentFragment extends Fragment {
     }
 
     private void verifyEmailAndKey(String email, String key) {
-
         progress.smoothToShow();
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -165,6 +169,8 @@ public class HomeStudentFragment extends Fragment {
                                 dialogUtils.errorDialog(requireActivity(), "The Combination Does Not Exist");
                                 dialogUtils.showDialog();
                                 Log.e(TAG, "onComplete: doesnt exist");
+                                progress.smoothToHide();
+                                takeQuiz_button.setEnabled(true);
                                 return;
                             }
 
@@ -189,33 +195,37 @@ public class HomeStudentFragment extends Fragment {
                                 int secs = toDate.getSeconds();
                                 int[] date = { day, month, year, minutes, secs };
 
-                                // passing date object as a string
-                                DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
-                                String mdy = dateFormat.format(toDate);
+                                try {
+                                    // passing date object as a string
+                                    DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(getContext());
+                                    String mdy = dateFormat.format(toDate);
 
-                                // formatting the timestamp string
-                                dateFormat = android.text.format.DateFormat.getTimeFormat(getContext());
-                                String ms = dateFormat.format(toDate);
-                                String createdAt = mdy + " at " + ms;
+                                    // formatting the timestamp string
+                                    dateFormat = android.text.format.DateFormat.getTimeFormat(getContext());
+                                    String ms = dateFormat.format(toDate);
+                                    String createdAt = mdy + " at " + ms;
 
-                                PrepareQuizFragment prepareQuizFragment = PrepareQuizFragment.newInstance(
-                                        quizName,
-                                        quizType,
-                                        numQuizQuestions,
-                                        createdBy,
-                                        createdAt,
-                                        allowedTime,
-                                        date,
-                                        docId
-                                );
+                                    PrepareQuizFragment prepareQuizFragment = PrepareQuizFragment.newInstance(
+                                            quizName,
+                                            quizType,
+                                            numQuizQuestions,
+                                            createdBy,
+                                            createdAt,
+                                            allowedTime,
+                                            date,
+                                            docId
+                                    );
 
-                                // start the prepare quiz fragment
-                                requireActivity().getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container, prepareQuizFragment).commit();
+                                    // start the prepare quiz fragment
+                                    requireActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.fragment_container, prepareQuizFragment).commit();
+
+                                } catch (NullPointerException e) {
+                                    Log.e(TAG, "onComplete: " + e.getMessage());
+                                }
                             }
                         } else {
                             Log.e(TAG, "onComplete: task could not be completed => " + task.getException());
-                            progress.smoothToHide();
                         }
                     }
                 });
