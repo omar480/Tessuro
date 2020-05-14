@@ -295,7 +295,7 @@ public class QuizMakerFragment extends Fragment {
             return this.questionList.size();
         }
 
-        private static class QuizMakerViewHolder extends RecyclerView.ViewHolder {
+        static class QuizMakerViewHolder extends RecyclerView.ViewHolder {
             public View questionItem_view;
             public TextView questionNum_textView;
             public TextInputLayout question_textField;
