@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="50dp"
     android:paddingBottom="20dp"
+    android:background="@color/colorTessuroBackground"
     android:orientation="vertical">
 
     <TextView
