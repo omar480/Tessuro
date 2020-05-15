@@ -239,7 +239,7 @@ public class QuizMakerFragment extends Fragment {
         @NonNull
         @Override
         public QuizMakerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.question_view, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.make_question_view, parent, false);
             return new QuizMakerViewHolder(view);
         }
 
