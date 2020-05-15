@@ -69,10 +69,6 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-        // TODO IF USER IS SIGNED IN PUSH THEM TO OTHER PAGE
-        FirebaseUser currentUser = auth.getCurrentUser();
-
     }
 
     private String determineSelectedRole() {
