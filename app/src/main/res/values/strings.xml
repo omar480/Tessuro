@@ -83,4 +83,7 @@
     <string name="take_quiz">Take Quiz</string>
     <string name="submit_quiz">Submit Quiz</string>
 
+    <!-- Take Quiz Strings -->
+    <string name="your_answer">Your Answer: </string>
+
 </resources>

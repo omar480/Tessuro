@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="50dp"
+    android:paddingBottom="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/take_questionViewNumber_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Question x"
+        android:textSize="16sp"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/take_questionViewQuestion_textField"
+        android:layout_width="311dp"
+        android:layout_height="wrap_content"
+        app:hintTextColor="@color/colorTessuroPrimary">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/take_questionViewQuestion_textview"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:minHeight="85dp"
+            android:hint="@string/question"
+            android:background="@drawable/rectangle"
+
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:text="@string/your_answer"
+        android:textSize="16sp" />
+
+    <RadioGroup
+        android:id="@+id/take_questionViewTrueFalse_radioGroup"
+        android:layout_width="310dp"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/retypePass_textField">
+
+        <RadioButton
+            android:id="@+id/take_questionViewTrue_radioButton"
+            android:layout_width="155dp"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorTessuroPrimary"
+            android:checked="false"
+            android:text="@string/quiz_true"
+            app:useMaterialThemeColors="false" />
+
+        <RadioButton
+            android:id="@+id/take_questionViewFalse_radioButton"
+            android:layout_width="155dp"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorTessuroPrimary"
+            android:text="@string/quiz_false" />
+
+    </RadioGroup>
+</LinearLayout>
