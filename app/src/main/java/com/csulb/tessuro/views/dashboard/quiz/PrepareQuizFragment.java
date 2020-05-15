@@ -192,6 +192,12 @@ public class PrepareQuizFragment extends Fragment {
                                     editor.putString("QUESTION_KEY", json);
                                     editor.apply();
 
+                                    // pass the document key of the quiz
+                                    Bundle args = new Bundle();
+                                    args.putString("doc_id", docId);
+                                    TakeQuizFragment takeQuizFragment = new TakeQuizFragment();
+                                    takeQuizFragment.setArguments(args);
+
                                     // start the take quiz fragment
                                     requireActivity().getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.fragment_container, new TakeQuizFragment()).commit();
