@@ -22,6 +22,7 @@ import com.csulb.tessuro.views.dashboard.help.HelpFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
 import com.csulb.tessuro.views.dashboard.profile.ProfileFragment;
+import com.csulb.tessuro.views.dashboard.quiz.QuizHistoryFragment;
 import com.csulb.tessuro.views.intro.WelcomeActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -108,6 +109,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 break;
             case R.id.nav_about:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutUsFragment()).commit();
+                break;
+            case R.id.nav_quiz_preferences:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new QuizHistoryFragment()).commit();
                 break;
             case R.id.nav_logout:
                 handleLogout();

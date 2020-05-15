@@ -85,5 +85,8 @@
 
     <!-- Take Quiz Strings -->
     <string name="your_answer">Your Answer: </string>
+    <string name="currently_not_implemented">Currently Not Implemented</string>
+    <string name="quiz_history">Quiz History</string>
+    <string name="authorization">Authorization</string>
 
 </resources>
