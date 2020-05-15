@@ -164,7 +164,16 @@ public class ProfileUpdateFragment extends Fragment {
 
                 try {
                     String fullname = Objects.requireNonNull(fullname_textView.getEditText()).getText().toString();
-                    Log.i(TAG, "onClick: handleUpdateFullname: " + fullname);
+
+                    AuthUtils authUtils = new AuthUtils();
+
+                    if (!authUtils.isFullnameLengthValid(fullname)) {
+                        DialogUtils dialogUtils = new DialogUtils();
+                        dialogUtils.errorDialog(requireActivity(), "A fullname must contain 5 to 35 characters.");
+                        dialogUtils.showDialog();
+                        return;
+                    }
+
                     updateFullname(fullname);
                 } catch (Exception e) {
                     Log.e(TAG, "onClick: handleUpdateFullName: " + e.getMessage());
