@@ -200,7 +200,7 @@ public class PrepareQuizFragment extends Fragment {
 
                                     // start the take quiz fragment
                                     requireActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.fragment_container, new TakeQuizFragment()).commit();
+                                            .replace(R.id.fragment_container, takeQuizFragment).commit();
                                 } else {
                                     Log.e(TAG, "onComplete: unsuccessful");
                                     takeQuiz_button.setEnabled(true);;
