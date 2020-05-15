@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -115,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void fetchUserData(final String email) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
         firestore
             .collection("users")
             .document(email)
@@ -146,6 +148,5 @@ public class LoginActivity extends AppCompatActivity {
                     progressbar.hide();
                 }
         });
-
     }
 }

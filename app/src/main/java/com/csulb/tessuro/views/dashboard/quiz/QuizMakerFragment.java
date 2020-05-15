@@ -2,6 +2,7 @@ package com.csulb.tessuro.views.dashboard.quiz;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,8 +17,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.csulb.tessuro.R;
@@ -27,17 +31,24 @@ import com.csulb.tessuro.utils.DialogUtils;
 import com.csulb.tessuro.utils.SystemUtils;
 import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firestore.v1.Document;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +62,9 @@ public class QuizMakerFragment extends Fragment {
     private FirebaseAuth auth;
 
     private ArrayList<QuestionModel> questionList;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     private MaterialButton createQuiz_button;
 
     private String quizName;
@@ -92,11 +106,11 @@ public class QuizMakerFragment extends Fragment {
         }
 
         // recycler stuff
-        RecyclerView recyclerView = view.findViewById(R.id.createQuiz_recyclerView);
+        recyclerView = view.findViewById(R.id.createQuiz_recyclerView);
         recyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        RecyclerView.Adapter adapter = new QuizMakerAdapter(questionList);
+        layoutManager = new LinearLayoutManager(getContext());
+        adapter = new QuizMakerAdapter(questionList);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -238,6 +252,23 @@ public class QuizMakerFragment extends Fragment {
             int questionNumber = questionModel.getQuestionNumber() + 1;
             holder.questionNum_textView.setText("Question " + questionNumber);
 
+            // save the question that the admin input
+            holder.question_editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    Log.i(TAG, "onTextChanged: position = " + position + " <-> editText is = " + holder.question_editText.getText().toString());
+
+                    // set the question
+                    questionList.get(position).setQuestion(holder.question_editText.getText().toString());
+                }
+            });
+
             holder.trueFalse_radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -277,7 +308,7 @@ public class QuizMakerFragment extends Fragment {
                 super(itemView);
 
                 questionItem_view = itemView;
-                questionNum_textView = itemView.findViewById(R.id.answerQuestionViewNumber_textView);
+                questionNum_textView = itemView.findViewById(R.id.questionViewNumber_textView);
                 question_textField = itemView.findViewById(R.id.questionViewQuestion_textField);
                 trueFalse_radioGroup = itemView.findViewById(R.id.questionViewTrueFalse_radioGroup);
                 true_radioButton = itemView.findViewById(R.id.questionViewTrue_radioButton);
