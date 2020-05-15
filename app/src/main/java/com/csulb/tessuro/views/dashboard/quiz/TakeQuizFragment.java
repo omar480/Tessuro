@@ -202,7 +202,7 @@ public class TakeQuizFragment extends Fragment {
 
                             // pass the document key of the quiz
                             Bundle args = new Bundle();
-                            args.putString("doc_id", docId);
+                            args.putString("DOC_ID", docId);
                             args.putString("EMAIL", auth.getCurrentUser().getEmail());
                             args.putInt("NUM_CORRECT", numCorrect);
                             args.putStringArrayList("QUESTIONS_CORRECT", answeredCorrectQuestions);
