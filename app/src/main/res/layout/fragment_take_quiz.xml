@@ -28,12 +28,11 @@
             android:paddingHorizontal="20dp"
             android:paddingVertical="5dp">
 
-            <!-- add to string values -->
             <TextView
-                android:id="@+id/studentQuizSlogan_textView"
-                android:layout_width="wrap_content"
+                android:id="@+id/takeQuizTimer_textView"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Quiz Title"
+                android:text="Timer goes here"
                 android:textAlignment="center"
                 android:textColor="@color/colorTessuroPrimary"
                 android:textSize="16sp" />
