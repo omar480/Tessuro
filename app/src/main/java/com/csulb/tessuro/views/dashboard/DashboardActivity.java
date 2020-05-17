@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.UserModel;
+import com.csulb.tessuro.utils.SystemUtils;
 import com.csulb.tessuro.views.dashboard.about.AboutUsFragment;
 import com.csulb.tessuro.views.dashboard.help.HelpFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
@@ -79,6 +80,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             Log.e(TAG, "onCreate: setting email & role in drawer -> " + e.getMessage());
         }
 
+        handleDrawerActions();
+
         if (savedInstanceState == null) {
 
             if (userModel.getRole().equals("Admin")) {
@@ -88,6 +91,23 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
             navigationView.setCheckedItem(R.id.nav_home);
         }
+    }
+
+    public void handleDrawerActions() {
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                Log.e(TAG, "onDrawerOpened: drawer opened");
+
+                try {
+                    SystemUtils systemUtils = new SystemUtils();
+                    systemUtils.hideSoftKeyboard(DashboardActivity.this);
+                } catch (Exception e) {
+                    Log.e(TAG, "onDrawerOpened: the keyboard was not opened");
+                }
+            }
+        });
     }
 
     @Override
