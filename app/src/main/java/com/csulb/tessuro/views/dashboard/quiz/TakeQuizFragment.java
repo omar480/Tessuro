@@ -100,7 +100,10 @@ public class TakeQuizFragment extends Fragment {
                 try {
                     final String[] selectedAnswers = ((QuizTakerAdapter) adapter).getSelectedAnswers();
 
-                    Log.i(TAG, "onClick: selectedAnswers => " + selectedAnswers[0] + selectedAnswers[1]);
+                    for (int i = 0; i < selectedAnswers.length; i++) {
+                        Log.i(TAG, "onClick: selectedAnswers => " + selectedAnswers[i]);
+                    }
+
                     ArrayList<Integer> unansweredNums = new ArrayList<>();
 
                     for (int i = 0; i < selectedAnswers.length; i++) {
@@ -231,6 +234,7 @@ public class TakeQuizFragment extends Fragment {
 
         QuizTakerAdapter(ArrayList<QuestionModel> questionList) {
             this.questionList = questionList;
+            selectedAnswers = new String[questionList.size()];  // instantiate the array of size questionList
         }
 
         public String[] getSelectedAnswers() {
@@ -241,7 +245,6 @@ public class TakeQuizFragment extends Fragment {
         @Override
         public QuizTakerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.takequiz_view, parent, false);
-            selectedAnswers = new String[questionList.size()];  // instantiate the array of size questionList
             return new QuizTakerViewHolder(view);
         }
 
@@ -270,7 +273,7 @@ public class TakeQuizFragment extends Fragment {
                         // put the checked radio button value in the array
                         selectedAnswers[position] = selectedValue;
 
-                        Log.i(TAG, "onCheckedChanged: position = " + position
+                        Log.i(TAG, "onCheckedChanged: position = " + position + ", value = " + selectedValue
                                 + " selectedAnswers[position] => " + selectedAnswers[position]);
 
                     } catch (Exception e) {
@@ -290,10 +293,7 @@ public class TakeQuizFragment extends Fragment {
 
             public View questionItem_view;
             public TextView questionNum_textView;
-
             public RadioGroup trueFalse_radioGroup;
-            public RadioButton true_radioButton;
-            public RadioButton false_radioButton;
             public TextView question_textview;
 
             QuizTakerViewHolder(@NonNull View itemView) {
@@ -302,8 +302,6 @@ public class TakeQuizFragment extends Fragment {
                 questionItem_view = itemView;
                 questionNum_textView = itemView.findViewById(R.id.take_questionViewNumber_textView);
                 trueFalse_radioGroup = itemView.findViewById(R.id.take_questionViewTrueFalse_radioGroup);
-                true_radioButton = itemView.findViewById(R.id.take_questionViewTrue_radioButton);
-                false_radioButton = itemView.findViewById(R.id.take_questionViewFalse_radioButton);
                 question_textview = itemView.findViewById(R.id.take_questionViewQuestion_textview);
             }
         }
