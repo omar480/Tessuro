@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.csulb.tessuro.R;
 import com.csulb.tessuro.models.QuestionModel;
+import com.csulb.tessuro.views.dashboard.DashboardActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -224,6 +225,26 @@ public class TakeQuizFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            Objects.requireNonNull(((DashboardActivity) requireActivity()).getSupportActionBar()).hide();
+        } catch (Exception e) {
+            Log.e(TAG, "onResume: App bar is already hidden => " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            Objects.requireNonNull(((DashboardActivity) requireActivity()).getSupportActionBar()).show();
+        } catch (Exception e) {
+            Log.e(TAG, "onStop: App bar is already visible => " + e.getMessage());
+        }
     }
 
     public static class QuizTakerAdapter extends RecyclerView.Adapter<QuizTakerAdapter.QuizTakerViewHolder> {
