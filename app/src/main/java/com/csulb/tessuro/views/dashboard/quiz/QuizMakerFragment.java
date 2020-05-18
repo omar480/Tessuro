@@ -2,7 +2,6 @@ package com.csulb.tessuro.views.dashboard.quiz;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,11 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.csulb.tessuro.R;
@@ -31,24 +27,17 @@ import com.csulb.tessuro.utils.DialogUtils;
 import com.csulb.tessuro.utils.SystemUtils;
 import com.csulb.tessuro.views.dashboard.home.HomeAdminFragment;
 import com.csulb.tessuro.views.dashboard.home.HomeStudentFragment;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
-import com.google.firestore.v1.Document;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,9 +80,6 @@ public class QuizMakerFragment extends Fragment {
         quizTime = Objects.requireNonNull(requireArguments().get("QUIZ_TIME")).toString();
         quizType = Objects.requireNonNull(requireArguments().get("QUIZ_TYPE")).toString();
 
-        Log.i(TAG, "onCreateView: quizName = " + quizName + ", quizKey = " + quizKey +
-                ", quizNum = " + quizNum + ", quizTime = " + quizTime);
-
         // since this option is T/F, the only available answers are true and false
         ArrayList<String> answerChoices = new ArrayList<>();
         answerChoices.add("True");
@@ -131,9 +117,15 @@ public class QuizMakerFragment extends Fragment {
                     Log.e(TAG, "onClick: keyboard wasn't open");
                 }
 
+                // get the questions that were entered
+                String[] questionsEntered = ((QuizMakerAdapter) adapter).getQuestionsEntered();
+
                 // make sure fields are valid
                 for (int i = 0; i < questionList.size(); i++) {
-                    String question = questionList.get(i).getQuestion();
+                    String question = questionsEntered[i];
+                    Log.i(TAG, "onClick: question => " + question);
+
+                    // check if the question is valid
                     if (question.isEmpty() || question.length() < 4) {
                         DialogUtils dialogUtils = new DialogUtils();
                         String message = "Question " + (i + 1) + " is either blank or shorter than 4 characters," +
@@ -229,50 +221,44 @@ public class QuizMakerFragment extends Fragment {
     }
 
     public static class QuizMakerAdapter extends RecyclerView.Adapter<QuizMakerAdapter.QuizMakerViewHolder> {
-        private String TAG = QuizMakerAdapter.class.getSimpleName();
-        private ArrayList<QuestionModel> questionList;
 
-        QuizMakerAdapter(ArrayList<QuestionModel> questionList) {
-            this.questionList = questionList;
+        private String TAG = QuizMakerAdapter.class.getSimpleName();
+        private ArrayList<QuestionModel> questionModels;
+        private String[] questionsEntered;     // stores the questions the user entered
+
+        QuizMakerAdapter(ArrayList<QuestionModel> questionModels) {
+            this.questionModels = questionModels;
+            questionsEntered = new String[questionModels.size()];
+        }
+
+        public String[] getQuestionsEntered() {
+            return this.questionsEntered;
         }
 
         @NonNull
         @Override
         public QuizMakerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.make_question_view, parent, false);
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.make_question_view, parent, false);
             return new QuizMakerViewHolder(view);
         }
 
         @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(@NonNull final QuizMakerViewHolder holder, final int position) {
-            final QuestionModel questionModel = questionList.get(position);
 
             // set the question number in the view
-            int questionNumber = questionModel.getQuestionNumber() + 1;
+            int questionNumber = position + 1;
             holder.questionNum_textView.setText("Question " + questionNumber);
 
-            // save the question that the admin input
-            holder.question_editText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            // update the position of the  get the questions entered
+            holder.questionInputTextListener.updatePosition(position);
+            holder.question_editText.setText(questionsEntered[position]);
 
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    Log.i(TAG, "onTextChanged: position = " + position + " <-> editText is = " + holder.question_editText.getText().toString());
-
-                    // set the question
-                    questionList.get(position).setQuestion(holder.question_editText.getText().toString());
-                }
-            });
-
+            // get the chosen answer
             holder.trueFalse_radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                     try {
                         int selectedRadioButton = group.getCheckedRadioButtonId();
                         View view = group.getRootView();
@@ -282,7 +268,7 @@ public class QuizMakerFragment extends Fragment {
                         Log.i(TAG, "onCheckedChanged: position = " + position + " value = " + selectedValue);
 
                         // set the answer for the question
-                        questionList.get(position).setAnswer(selectedValue);
+                        questionModels.get(position).setAnswer(selectedValue);
                     } catch (Exception e) {
                         Log.e(TAG, "onCheckedChanged: ");
                     }
@@ -292,31 +278,52 @@ public class QuizMakerFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return this.questionList.size();
+            return this.questionModels.size();
         }
 
-        static class QuizMakerViewHolder extends RecyclerView.ViewHolder {
-            public View questionItem_view;
+        public class QuizMakerViewHolder extends RecyclerView.ViewHolder {
             public TextView questionNum_textView;
-            public TextInputLayout question_textField;
             public RadioGroup trueFalse_radioGroup;
-            public RadioButton true_radioButton;
-            public RadioButton false_radioButton;
             public EditText question_editText;
+            public QuestionInputTextListener questionInputTextListener;
 
             QuizMakerViewHolder(@NonNull View itemView) {
                 super(itemView);
-
-                questionItem_view = itemView;
                 questionNum_textView = itemView.findViewById(R.id.questionViewNumber_textView);
-                question_textField = itemView.findViewById(R.id.questionViewQuestion_textField);
                 trueFalse_radioGroup = itemView.findViewById(R.id.questionViewTrueFalse_radioGroup);
-                true_radioButton = itemView.findViewById(R.id.questionViewTrue_radioButton);
-                false_radioButton = itemView.findViewById(R.id.questionViewFalse_radioButton);
                 question_editText = itemView.findViewById(R.id.questionViewQuestion_textInput);
+                questionInputTextListener = new QuestionInputTextListener();
+                question_editText.addTextChangedListener(questionInputTextListener);
+            }
+        }
+
+        public class QuestionInputTextListener implements TextWatcher {
+
+            private int position;   // the position of the recycler
+
+            public void updatePosition(int position) {
+                this.position = position;
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                questionsEntered[this.position] = s.toString();     // update the question input
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         }
     }
 }
+
+
+
 
 
