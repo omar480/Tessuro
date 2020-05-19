@@ -31,7 +31,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,15 +44,13 @@ import java.util.Objects;
 
 
 public class QuizMakerFragment extends Fragment {
+
     private String TAG = QuizMakerFragment.class.getSimpleName();
     private static final String USER_SHARED_PREF = "user";
 
     private FirebaseAuth auth;
 
     private ArrayList<QuestionModel> questionList;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
     private MaterialButton createQuiz_button;
 
     private String quizName;
@@ -85,22 +82,22 @@ public class QuizMakerFragment extends Fragment {
         answerChoices.add("True");
         answerChoices.add("False");
 
-        // create the number of recycler views with default questionModel, defautl answer is True
+        // create the number of recycler views with default questionModel, default answer is True
         questionList = new ArrayList<>();
         for (int i = 0; i < Integer.parseInt(quizNum); i++) {
-            questionList.add(new QuestionModel(i, "x", answerChoices, "True"));
+            questionList.add(new QuestionModel(i, null, answerChoices, null));
         }
 
         // recycler stuff
-        recyclerView = view.findViewById(R.id.createQuiz_recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.createQuiz_recyclerView);
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new LinearLayoutManager(getContext());
-        adapter = new QuizMakerAdapter(questionList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.Adapter adapter = new QuizMakerAdapter(questionList);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
+        recyclerView.setItemViewCacheSize(questionList.size());
         handleCreateQuiz();
         return view;
     }
@@ -110,6 +107,8 @@ public class QuizMakerFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                createQuiz_button.setEnabled(false);    // disable button
+
                 try {
                     SystemUtils systemUtils = new SystemUtils();
                     systemUtils.hideSoftKeyboard(requireActivity());
@@ -117,12 +116,9 @@ public class QuizMakerFragment extends Fragment {
                     Log.e(TAG, "onClick: keyboard wasn't open");
                 }
 
-                // get the questions that were entered
-                String[] questionsEntered = ((QuizMakerAdapter) adapter).getQuestionsEntered();
-
-                // make sure fields are valid
+                // make sure question fields are valid
                 for (int i = 0; i < questionList.size(); i++) {
-                    String question = questionsEntered[i];
+                    String question = questionList.get(i).getQuestion();
                     Log.i(TAG, "onClick: question => " + question);
 
                     // check if the question is valid
@@ -132,9 +128,36 @@ public class QuizMakerFragment extends Fragment {
                                 " please reference to complete quiz creation.";
                         dialogUtils.errorDialog(requireActivity(), message);
                         dialogUtils.showDialog();
+                        createQuiz_button.setEnabled(true);
                         return;
                     }
                 }
+
+                // make sure all questions have an answer
+                // used to count num of unanswered questions
+                ArrayList<Integer> unansweredNums = new ArrayList<>();
+
+                // find num of unanswered questions
+                for (int i = 0; i < questionList.size(); i++) {
+                    String a = questionList.get(i).getAnswer();
+
+                    if (a == null) {
+                        unansweredNums.add(i);
+                    }
+                }
+
+                // if true, there are unanswered questions
+                if (unansweredNums.size() > 0) {
+                    String message = "You did not choose an answer for " + unansweredNums.size()
+                            + " question(s), please refer back to your questions.";
+
+                    DialogUtils dialogUtils = new DialogUtils();
+                    dialogUtils.errorDialog(requireActivity(), message);
+                    dialogUtils.showDialog();
+                    createQuiz_button.setEnabled(true);
+                    return;
+                }
+
                 uploadQuiz();   // fields are valid so upload questions
             }
         });
@@ -143,7 +166,6 @@ public class QuizMakerFragment extends Fragment {
     private void uploadQuiz() {
 
         String authEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
-        Log.e(TAG, "uploadQuiz: quthemail " + authEmail);
 
         final Map<String, Object> docData = new HashMap<>();
         docData.put("quizName", quizName);
@@ -158,7 +180,6 @@ public class QuizMakerFragment extends Fragment {
         assert authEmail != null;
 
         final String docRef = firestore.collection("users").document().getId();
-        Log.i(TAG, "uploadQuiz: doc id => " + docRef);
 
         firestore
                 .collection("quizzes")
@@ -173,8 +194,6 @@ public class QuizMakerFragment extends Fragment {
                             WriteBatch batch = firestore.batch();
 
                             for (int i = 0; i < questionList.size(); i++) {
-                                Log.i(TAG, "onComplete: quesitonlist.getI => " + questionList.get(i).getQuestion());
-
                                 DocumentReference documentReference = firestore
                                         .collection("quizzes")
                                         .document(docRef)
@@ -213,6 +232,7 @@ public class QuizMakerFragment extends Fragment {
                                     DialogUtils dialogUtils = new DialogUtils();
                                     dialogUtils.errorDialog(requireActivity(), "Failed to create quiz. Try Again.");
                                     dialogUtils.showDialog();
+                                    createQuiz_button.setEnabled(true);
                                 }
                             });
                         }
@@ -224,15 +244,11 @@ public class QuizMakerFragment extends Fragment {
 
         private String TAG = QuizMakerAdapter.class.getSimpleName();
         private ArrayList<QuestionModel> questionModels;
-        private String[] questionsEntered;     // stores the questions the user entered
+        private int[] selectedAnswer;
 
         QuizMakerAdapter(ArrayList<QuestionModel> questionModels) {
             this.questionModels = questionModels;
-            questionsEntered = new String[questionModels.size()];
-        }
-
-        public String[] getQuestionsEntered() {
-            return this.questionsEntered;
+            selectedAnswer = new int[questionModels.size()];
         }
 
         @NonNull
@@ -253,27 +269,11 @@ public class QuizMakerFragment extends Fragment {
 
             // update the position of the  get the questions entered
             holder.questionInputTextListener.updatePosition(position);
-            holder.question_editText.setText(questionsEntered[position]);
+            holder.question_editText.setText(questionModels.get(position).getQuestion());
 
             // get the chosen answer
-            holder.trueFalse_radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    try {
-                        int selectedRadioButton = group.getCheckedRadioButtonId();
-                        View view = group.getRootView();
-                        RadioButton radioButton = view.findViewById(selectedRadioButton);
-                        String selectedValue = radioButton.getText().toString();
-
-                        Log.i(TAG, "onCheckedChanged: position = " + position + " value = " + selectedValue);
-
-                        // set the answer for the question
-                        questionModels.get(position).setAnswer(selectedValue);
-                    } catch (Exception e) {
-                        Log.e(TAG, "onCheckedChanged: ");
-                    }
-                }
-            });
+            holder.radioButtonSelectedListener.updatePosition(position);
+            holder.trueFalse_radioGroup.check(selectedAnswer[position]);
         }
 
         @Override
@@ -281,19 +281,31 @@ public class QuizMakerFragment extends Fragment {
             return this.questionModels.size();
         }
 
-        public class QuizMakerViewHolder extends RecyclerView.ViewHolder {
-            public TextView questionNum_textView;
-            public RadioGroup trueFalse_radioGroup;
-            public EditText question_editText;
-            public QuestionInputTextListener questionInputTextListener;
+        private class QuizMakerViewHolder extends RecyclerView.ViewHolder {
+            private TextView questionNum_textView;
+
+            private EditText question_editText;
+            private QuestionInputTextListener questionInputTextListener;
+
+            private RadioButtonSelectedListener radioButtonSelectedListener;
+            private RadioGroup trueFalse_radioGroup;
+
 
             QuizMakerViewHolder(@NonNull View itemView) {
                 super(itemView);
+
+                // used for displaying the question number
                 questionNum_textView = itemView.findViewById(R.id.questionViewNumber_textView);
-                trueFalse_radioGroup = itemView.findViewById(R.id.questionViewTrueFalse_radioGroup);
+
+                // edit text for the questions
                 question_editText = itemView.findViewById(R.id.questionViewQuestion_textInput);
                 questionInputTextListener = new QuestionInputTextListener();
                 question_editText.addTextChangedListener(questionInputTextListener);
+
+                // radio group for the answers
+                trueFalse_radioGroup = itemView.findViewById(R.id.questionViewTrueFalse_radioGroup);
+                radioButtonSelectedListener = new RadioButtonSelectedListener();
+                trueFalse_radioGroup.setOnCheckedChangeListener(radioButtonSelectedListener);
             }
         }
 
@@ -301,23 +313,49 @@ public class QuizMakerFragment extends Fragment {
 
             private int position;   // the position of the recycler
 
-            public void updatePosition(int position) {
+            private void updatePosition(int position) {
                 this.position = position;
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                // no use
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                questionsEntered[this.position] = s.toString();     // update the question input
+                questionModels.get(position).setQuestion(s.toString());    // update the question input
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                // no use
+            }
+        }
 
+        public class RadioButtonSelectedListener implements RadioGroup.OnCheckedChangeListener {
+
+            private int position;   // the position of the recycler
+
+            private void updatePosition(int position) {
+                this.position = position;
+            }
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                try {
+                    int selectedRadioButton = group.getCheckedRadioButtonId();
+                    View view = group.getRootView();
+                    RadioButton radioButton = view.findViewById(selectedRadioButton);
+                    String selectedValue = radioButton.getText().toString();
+
+                    // set the answer for the question
+                    selectedAnswer[this.position] = selectedRadioButton;
+                    questionModels.get(position).setAnswer(selectedValue);
+                } catch (Exception e) {
+                    Log.e(TAG, "onCheckedChanged: the radio button has not had a selected value. Thats okay.");
+                }
             }
         }
     }
