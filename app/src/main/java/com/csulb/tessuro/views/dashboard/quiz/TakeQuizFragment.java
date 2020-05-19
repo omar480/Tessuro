@@ -27,7 +27,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,12 +42,12 @@ public class TakeQuizFragment extends Fragment {
 
     private static final String TAG = TakeQuizFragment.class.getSimpleName();
     FirebaseAuth auth;
+
     private ArrayList<QuestionModel> questionList;
     private String docId;
+
     private MaterialButton submitQuiz_button;
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     public TakeQuizFragment() {
         // Required empty public constructor
@@ -73,19 +72,16 @@ public class TakeQuizFragment extends Fragment {
 
         questionList = gson.fromJson(json, type);
 
-        for (int i = 0; i < questionList.size();i ++) {
-            Log.i(TAG, "onCreateView: questions => " + questionList.get(i).getQuestion());
-        }
-
         // recycler stuff
-        recyclerView = view.findViewById(R.id.takeQuiz_recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.takeQuiz_recyclerView);
         recyclerView.setHasFixedSize(false);
 
-        layoutManager = new LinearLayoutManager(getContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         adapter = new QuizTakerAdapter(questionList);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemViewCacheSize(questionList.size());
 
         handleSubmitQuiz();
         return view;
@@ -99,14 +95,14 @@ public class TakeQuizFragment extends Fragment {
                 submitQuiz_button.setEnabled(false);    // disable button
 
                 try {
-                    final String[] selectedAnswers = ((QuizTakerAdapter) adapter).getSelectedAnswers();
+                    // used to check validations for selected answers
+                    final String[] selectedAnswers = ((QuizTakerAdapter) adapter).getSelectedAnswerValues();
 
-                    for (int i = 0; i < selectedAnswers.length; i++) {
-                        Log.i(TAG, "onClick: selectedAnswers => " + selectedAnswers[i]);
-                    }
-
+                    // make sure all questions have an answer
+                    // used to count num of unanswered questions
                     ArrayList<Integer> unansweredNums = new ArrayList<>();
 
+                    // find num of unanswered questions
                     for (int i = 0; i < selectedAnswers.length; i++) {
                         String a = selectedAnswers[i];
 
@@ -115,36 +111,34 @@ public class TakeQuizFragment extends Fragment {
                         }
                     }
 
+                    // if true, there are unanswered questions
                     if (unansweredNums.size() > 0) {    // there are unanswered num
                         String message = "You did not answer " + unansweredNums.size()
-                                + " questions, are you sure you want to submit?";
+                                + " question(s), are you sure you want to submit?";
 
                         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(requireActivity());
                         dialogBuilder.setTitle("Warning");
                         dialogBuilder.setIcon(R.drawable.ic_help);
                         dialogBuilder.setMessage(message);
                         dialogBuilder.setCancelable(false);
-
                         dialogBuilder.setNegativeButton("No, Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Log.i(TAG, "onClick: cancel *****************************************");
                                 submitQuiz_button.setEnabled(true);     // re enable button
                             }
                         });
                         dialogBuilder.setPositiveButton("Yes, Submit", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Log.i(TAG, "onClick: submit");
                                 determineAnswers(selectedAnswers);      // find answers are correct
                             }
                         });
                         dialogBuilder.show();
                     } else {
-                        determineAnswers(selectedAnswers);
+                        determineAnswers(selectedAnswers);  // fields are valid, proceed to get answers
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "onClick: => " + e.getMessage());
+                    Log.e(TAG, "onClick: " + e.getMessage());
                 }
             }
         });
@@ -164,16 +158,12 @@ public class TakeQuizFragment extends Fragment {
                 if (selectedAnswers[i].equals(questionList.get(i).getAnswer())) {
                     answeredCorrectQuestions.add(questionList.get(i).getQuestion());
                     numCorrect++;
-
-                    Log.i(TAG, "determineAnswers: question => " + questionList.get(i).getQuestion());
-                    Log.i(TAG, "determineAnswers: correct answer => " + questionList.get(i).getAnswer());
-                    Log.i(TAG, "determineAnswers: selected answer => " + selectedAnswers[i]);
                 } else {
                     answeredIncorrectQuestions.add(questionList.get(i).getQuestion());
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, "determineAnswers: null reference => questions were not answered, but that is fine");
+            Log.e(TAG, "determineAnswers: questions were not answered. That's okay.");
         }
 
         // push quiz information
@@ -181,7 +171,8 @@ public class TakeQuizFragment extends Fragment {
     }
 
     private void pushQuizInformation(final ArrayList<String> answeredCorrectQuestions,
-                                     final ArrayList<String> answeredIncorrectQuestions, final int numCorrect) {
+                                     final ArrayList<String> answeredIncorrectQuestions,
+                                     final int numCorrect) {
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         String docRef = firestore.collection("quizScores").document().getId();
@@ -250,16 +241,15 @@ public class TakeQuizFragment extends Fragment {
     public static class QuizTakerAdapter extends RecyclerView.Adapter<QuizTakerAdapter.QuizTakerViewHolder> {
         private String TAG = TakeQuizFragment.QuizTakerAdapter.class.getSimpleName();
         private ArrayList<QuestionModel> questionList;
-        private String[] selectedAnswers;
-
+        private String[] selectedAnswerValues;
 
         QuizTakerAdapter(ArrayList<QuestionModel> questionList) {
             this.questionList = questionList;
-            selectedAnswers = new String[questionList.size()];  // instantiate the array of size questionList
+            selectedAnswerValues = new String[questionList.size()];  // instantiate the array of size questionList
         }
 
-        public String[] getSelectedAnswers() {
-            return this.selectedAnswers;
+        private String[] getSelectedAnswerValues() {
+            return this.selectedAnswerValues;
         }
 
         @NonNull
@@ -279,30 +269,10 @@ public class TakeQuizFragment extends Fragment {
             holder.questionNum_textView.setText("Question " + questionNumber);
 
             // set the question in the view
-            holder.question_textview.setText(questionModel.getQuestion());
+            holder.question_textView.setText(questionModel.getQuestion());
 
             // get the value chosen from the radio group
-            holder.trueFalse_radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    try {
-                        int selectedRadioButton = group.getCheckedRadioButtonId();
-                        View view = group.getRootView();
-                        RadioButton radioButton = view.findViewById(selectedRadioButton);
-                        String selectedValue = radioButton.getText().toString();
-
-                        // put the checked radio button value in the array
-                        selectedAnswers[position] = selectedValue;
-
-                        Log.i(TAG, "onCheckedChanged: position = " + position + ", value = " + selectedValue
-                                + " selectedAnswers[position] => " + selectedAnswers[position]);
-
-                    } catch (Exception e) {
-                        Log.e(TAG, "onCheckedChanged: " + e.getMessage());
-                    }
-                }
-
-            });
+            holder.radioButtonSelectedListener.updatePosition(position);
         }
 
         @Override
@@ -310,20 +280,45 @@ public class TakeQuizFragment extends Fragment {
             return this.questionList.size();
         }
 
-        private static class QuizTakerViewHolder extends RecyclerView.ViewHolder {
+        private class QuizTakerViewHolder extends RecyclerView.ViewHolder {
 
-            public View questionItem_view;
-            public TextView questionNum_textView;
-            public RadioGroup trueFalse_radioGroup;
-            public TextView question_textview;
+            private TextView questionNum_textView;
+            private TextView question_textView;
+            private RadioButtonSelectedListener radioButtonSelectedListener;
 
             QuizTakerViewHolder(@NonNull View itemView) {
                 super(itemView);
 
-                questionItem_view = itemView;
                 questionNum_textView = itemView.findViewById(R.id.take_questionViewNumber_textView);
-                trueFalse_radioGroup = itemView.findViewById(R.id.take_questionViewTrueFalse_radioGroup);
-                question_textview = itemView.findViewById(R.id.take_questionViewQuestion_textview);
+                question_textView = itemView.findViewById(R.id.take_questionViewQuestion_textview);
+
+                RadioGroup trueFalse_radioGroup = itemView.findViewById(R.id.take_questionViewTrueFalse_radioGroup);
+                radioButtonSelectedListener = new RadioButtonSelectedListener();
+                trueFalse_radioGroup.setOnCheckedChangeListener(radioButtonSelectedListener);
+            }
+        }
+
+        private class RadioButtonSelectedListener implements RadioGroup.OnCheckedChangeListener {
+
+            private int position;   // the position of the recycler
+
+            private void updatePosition(int position) {
+                this.position = position;
+            }
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                try {
+                    int selectedRadioButton = group.getCheckedRadioButtonId();
+                    View view = group.getRootView();
+                    RadioButton radioButton = view.findViewById(selectedRadioButton);
+                    String selectedValue = radioButton.getText().toString();
+
+                    // put the checked radio button value in the array
+                    selectedAnswerValues[position] = selectedValue;
+                } catch (Exception e) {
+                    Log.e(TAG, "onCheckedChanged: " + e.getMessage());
+                }
             }
         }
     }

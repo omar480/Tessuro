@@ -273,7 +273,6 @@ public class QuizMakerFragment extends Fragment {
 
             // get the chosen answer
             holder.radioButtonSelectedListener.updatePosition(position);
-            holder.trueFalse_radioGroup.check(selectedAnswer[position]);
         }
 
         @Override
@@ -288,8 +287,6 @@ public class QuizMakerFragment extends Fragment {
             private QuestionInputTextListener questionInputTextListener;
 
             private RadioButtonSelectedListener radioButtonSelectedListener;
-            private RadioGroup trueFalse_radioGroup;
-
 
             QuizMakerViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -303,13 +300,13 @@ public class QuizMakerFragment extends Fragment {
                 question_editText.addTextChangedListener(questionInputTextListener);
 
                 // radio group for the answers
-                trueFalse_radioGroup = itemView.findViewById(R.id.questionViewTrueFalse_radioGroup);
+                RadioGroup trueFalse_radioGroup = itemView.findViewById(R.id.questionViewTrueFalse_radioGroup);
                 radioButtonSelectedListener = new RadioButtonSelectedListener();
                 trueFalse_radioGroup.setOnCheckedChangeListener(radioButtonSelectedListener);
             }
         }
 
-        public class QuestionInputTextListener implements TextWatcher {
+        private class QuestionInputTextListener implements TextWatcher {
 
             private int position;   // the position of the recycler
 
@@ -333,7 +330,7 @@ public class QuizMakerFragment extends Fragment {
             }
         }
 
-        public class RadioButtonSelectedListener implements RadioGroup.OnCheckedChangeListener {
+        private class RadioButtonSelectedListener implements RadioGroup.OnCheckedChangeListener {
 
             private int position;   // the position of the recycler
 
