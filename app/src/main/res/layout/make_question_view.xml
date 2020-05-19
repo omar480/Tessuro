@@ -65,7 +65,6 @@
             android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:buttonTint="@color/colorTessuroPrimary"
-            android:checked="true"
             android:text="@string/quiz_true"
             app:useMaterialThemeColors="false" />
 
